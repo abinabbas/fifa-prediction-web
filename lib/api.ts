@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+import { getApiBaseUrl } from "@/lib/config";
 
 export class ApiError extends Error {
   status: number;
@@ -10,7 +10,15 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const res = await fetch(`${API_URL}${path}`, {
+  const baseUrl = getApiBaseUrl();
+  if (!baseUrl) {
+    throw new ApiError(
+      "API URL is not configured. Set NEXT_PUBLIC_API_URL in your environment.",
+      0
+    );
+  }
+
+  const res = await fetch(`${baseUrl}${path}`, {
     ...options,
     credentials: "include",
     headers: {
