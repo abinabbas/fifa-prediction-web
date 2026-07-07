@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+:root {
+  --navy: #1e293b;
+  --navy-dark: #0f172a;
+  --orange: #f97316;
+  --orange-dark: #ea580c;
+  --background: #f8fafc;
+  --foreground: #1e293b;
+  --muted: #64748b;
+  --card: #ffffff;
+  --border: #e2e8f0;
+}
+
+@theme inline {
+  --color-navy: var(--navy);
+  --color-navy-dark: var(--navy-dark);
+  --color-orange: var(--orange);
+  --color-orange-dark: var(--orange-dark);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.launchpad-card {
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+  border: 1px solid var(--border);
+}
+
+.btn-navy {
+  background: var(--navy);
+  color: white;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.btn-navy:hover {
+  background: var(--navy-dark);
+}
+
+.btn-orange {
+  background: var(--orange);
+  color: white;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.btn-orange:hover {
+  background: var(--orange-dark);
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  color: var(--foreground);
+  font-size: 14px;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(30, 41, 59, 0.1);
+}
+
+.input-field::placeholder {
+  color: #94a3b8;
+}
+
+.label-upper {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Register page — matches design mockup */
+.register-page-bg {
+  background: #eef1f6;
+}
+
+.register-card {
+  background: #f4f6f9;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 16px rgba(15, 23, 42, 0.06);
+}
+
+.register-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.register-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #dde3ec;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1e293b;
+  font-size: 14px;
+}
+
+.register-input:focus {
+  outline: none;
+  border-color: #1a2b4b;
+  box-shadow: 0 0 0 2px rgba(26, 43, 75, 0.08);
+}
+
+.register-input::placeholder {
+  color: #b0bac8;
+}
+
+.register-btn-primary {
+  background: #1a2b4b;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 15px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.register-btn-primary:hover {
+  background: #152238;
+}
+
+.register-btn-secondary {
+  background: #ffffff;
+  color: #1a2b4b;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  border-radius: 8px;
+  border: 1.5px solid #1a2b4b;
+  transition: background 0.2s;
+}
+
+.register-btn-secondary:hover {
+  background: #f8fafc;
+}
