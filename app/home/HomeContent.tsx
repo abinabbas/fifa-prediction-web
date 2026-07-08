@@ -7,6 +7,7 @@ import { LaunchpadHeader } from "@/components/launchpad/LaunchpadHeader";
 import { LaunchpadFooter } from "@/components/launchpad/LaunchpadFooter";
 import { HeroSection } from "@/components/launchpad/HeroSection";
 import { StepsSection } from "@/components/launchpad/StepsSection";
+import { WinnerSelectionSection } from "@/components/launchpad/WinnerSelectionSection";
 import { PredictionHub } from "@/components/launchpad/PredictionHub";
 
 export function HomeContent() {
@@ -35,6 +36,7 @@ export function HomeContent() {
 
       <HeroSection />
       <StepsSection />
+      <WinnerSelectionSection />
       <PredictionHub user={loading ? null : user} />
       <LaunchpadFooter />
     </div>

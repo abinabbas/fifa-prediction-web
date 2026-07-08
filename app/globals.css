@@ -23,11 +23,84 @@
   --color-card: var(--card);
   --color-border: var(--border);
   --font-sans: var(--font-inter);
+  --font-family-hero: var(--font-hero), "Arial Narrow", sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+.hero-title-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  transform: skewX(-13deg) scaleX(1.1);
+  transform-origin: center top;
+}
+
+.hero-title-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: clamp(0.1rem, 0.5vw, 0.35rem);
+  filter: drop-shadow(4px 6px 14px rgba(0, 0, 0, 0.45));
+}
+
+.hero-kickstart-line {
+  font-family: var(--font-hero), "Arial Narrow", sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: clamp(1.6rem, 10.5vw, 4.5rem);
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-align: center;
+  color: #ffffff;
+  text-shadow:
+    -2px -2px 0 #3d4a5c,
+    2px -2px 0 #3d4a5c,
+    -2px 2px 0 #3d4a5c,
+    2px 2px 0 #3d4a5c,
+    0 -2px 0 #3d4a5c,
+    0 2px 0 #3d4a5c,
+    -2px 0 0 #3d4a5c,
+    2px 0 0 #3d4a5c,
+    -1px -1px 0 rgba(255, 255, 255, 0.45),
+    1px 2px 0 rgba(180, 190, 200, 0.35),
+    3px 5px 8px rgba(0, 0, 0, 0.35),
+    5px 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.hero-challenge-banner {
+  margin-top: clamp(0.3rem, 1.2vw, 0.65rem);
+  align-self: center;
+  width: fit-content;
+  max-width: 100%;
+  background-color: #f97316;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.12em 0.18em;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  border-radius: 0;
+}
+
+.hero-challenge-text {
+  font-family: var(--font-hero), "Arial Narrow", sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: clamp(1.3rem, 6.5vw, 2.95rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #ffffff;
+  white-space: nowrap;
+  text-shadow:
+    -1px -1px 0 rgba(0, 0, 0, 0.25),
+    1px 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 .launchpad-card {

@@ -208,7 +208,7 @@ export function PredictionHub({ user }: PredictionHubProps) {
         <p className="text-[10px] font-bold uppercase tracking-wider text-center text-[#f97316] mb-2">
           Prediction Hub
         </p>
-        <h2 className="text-2xl font-bold text-center text-[#1a2b4b] mb-8">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-slate-900 mb-8 sm:mb-10">
           Open predictions
         </h2>
 
