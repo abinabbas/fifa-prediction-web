@@ -50,7 +50,6 @@ export interface RegisterData {
   fullName: string;
   phone: string;
   email: string;
-  password: string;
   college: string;
   district: string;
 }

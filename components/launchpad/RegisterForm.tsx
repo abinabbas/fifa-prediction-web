@@ -21,7 +21,6 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
     fullName: "",
     phone: "",
     email: "",
-    password: "",
     college: "",
     district: "",
   });
@@ -95,23 +94,6 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
             className={inputClass}
             required
           />
-        </div>
-
-        <div className="mb-5">
-          <label htmlFor="password" className={labelClass}>Password</label>
-          <input
-            id="password"
-            type="password"
-            value={form.password}
-            onChange={(e) => update("password", e.target.value)}
-            placeholder="Min. 6 characters"
-            className={inputClass}
-            minLength={6}
-            required
-          />
-          <p className="mt-1.5 text-[11px] text-slate-400">
-            Used for admin login if your account is promoted to admin.
-          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
