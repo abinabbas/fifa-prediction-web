@@ -72,7 +72,7 @@ export function MentorshipSection() {
   };
 
   return (
-    <section className="py-8 sm:py-16" style={{ backgroundColor: "#fafafa" }}>
+    <section className="py-8 sm:py-16" id="prize" style={{ backgroundColor: "#fafafa" }}>
       <PageContainer>
         <div
           className="rounded-3xl p-4 sm:p-10 lg:p-12 shadow-xl"
