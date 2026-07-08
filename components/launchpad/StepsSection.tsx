@@ -26,7 +26,7 @@ const steps = [
 
 export function StepsSection() {
   return (
-    <section className="py-16 sm:py-20 bg-[#f8f9fa]" id="how-it-works">
+    <section className="py-8 sm:py-20 bg-[#f8f9fa]" id="how-it-works">
       <PageContainer>
         <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-8 md:mb-16">
           Start in 3 Simple Steps

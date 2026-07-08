@@ -207,7 +207,7 @@ export function PredictionHub({ user }: PredictionHubProps) {
   const submittedCount = Object.keys(predictions).length;
 
   return (
-    <section className="py-16 bg-[#fafafa]" id="predict">
+    <section className="py-8 sm:py-16 bg-[#fafafa]" id="predict">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <p className="text-[10px] font-bold uppercase tracking-wider text-center text-[#f97316] mb-2">
           Prediction Hub

@@ -72,10 +72,10 @@ export function MentorshipSection() {
   };
 
   return (
-    <section className="py-12 sm:py-16" style={{ backgroundColor: "#fafafa" }}>
+    <section className="py-8 sm:py-16" style={{ backgroundColor: "#fafafa" }}>
       <PageContainer>
         <div
-          className="rounded-3xl p-7 sm:p-10 lg:p-12 shadow-xl"
+          className="rounded-3xl p-4 sm:p-10 lg:p-12 shadow-xl"
           style={{ backgroundColor: "#312e81" }}
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14">
@@ -93,7 +93,7 @@ export function MentorshipSection() {
                 More Than Just a Prize, What You&apos;ll Unlock ?
               </p>
 
-              <h2 className="mt-3 text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold text-white leading-[1.15]">
+              <h2 className="mt-3 text-2xl sm:text-4xl lg:text-[2.75rem] font-extrabold text-white leading-[1.15]">
                 AI-Integrated Digital Marketing Mentorship Program
               </h2>
 
@@ -107,7 +107,7 @@ export function MentorshipSection() {
               </p>
 
               <div
-                className="mt-5 lg:mt-7 inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm sm:text-base font-extrabold"
+                className="mt-5 lg:mt-7 inline-flex items-center gap-2 rounded-lg px-4 sm:px-5 py-2 sm:py-2.5 text-sm sm:text-base font-extrabold"
                 style={{ backgroundColor: "#facc15", color: "#1e293b" }}
               >
                 <Trophy className="w-4 h-4" />
@@ -153,20 +153,20 @@ export function MentorshipSection() {
 
             {/* Right column: feature cards — compact icon+title on mobile, full card on desktop */}
             <div>
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
+              <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:gap-5">
                 {features.map((f) => (
                   <div
                     key={f.title}
-                    className="rounded-2xl p-3.5 sm:p-5 lg:p-6 flex items-center gap-3 lg:block"
+                    className="rounded-xl sm:rounded-2xl p-2.5 sm:p-5 lg:p-6 flex items-center gap-2 sm:gap-3 lg:block min-w-0"
                     style={{ backgroundColor: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.14)" }}
                   >
                     <div
-                      className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl flex items-center justify-center shrink-0 lg:mb-4"
+                      className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 lg:mb-4"
                       style={{ backgroundColor: f.tileBg }}
                     >
-                      <f.Icon className="w-5 h-5 lg:w-6 lg:h-6" style={{ color: f.iconColor }} />
+                      <f.Icon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" style={{ color: f.iconColor }} />
                     </div>
-                    <h3 className="text-[13px] sm:text-sm lg:text-[15px] font-bold text-white leading-snug lg:mb-2">
+                    <h3 className="text-xs sm:text-sm lg:text-[15px] font-bold text-white leading-snug lg:mb-2 min-w-0">
                       {f.title}
                     </h3>
                     <p

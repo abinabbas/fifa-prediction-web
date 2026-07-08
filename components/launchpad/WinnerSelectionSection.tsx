@@ -10,7 +10,7 @@ const terms = [
 
 export function WinnerSelectionSection() {
   return (
-    <section className="py-16 sm:py-20 bg-white">
+    <section className="py-8 sm:py-20 bg-white">
       <PageContainer>
         <div className="max-w-3xl">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-6">
