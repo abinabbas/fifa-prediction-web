@@ -147,6 +147,9 @@ export const api = {
 
   getOpenQuestions: () => request<OpenQuestionsResponse>("/api/questions/open"),
 
+  getPublicOpenQuestions: () =>
+    request<{ questions: Question[]; serverTime: string }>("/api/questions/open/public"),
+
   submitPrediction: (questionId: string, selectedOptionId: string) =>
     request<{ prediction: { id: string; selectedOptionId: string; createdAt: string } }>(
       "/api/predictions",

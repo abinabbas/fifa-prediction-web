@@ -179,15 +179,19 @@ export function PredictionHub({ user }: PredictionHubProps) {
   const [fetching, setFetching] = useState(true);
 
   const fetchQuestions = useCallback(async () => {
-    if (!user) {
-      setFetching(false);
-      return;
-    }
+    setFetching(true);
     try {
-      const res = await api.getOpenQuestions();
-      setQuestions(res.questions);
-      setPredictions(res.predictions);
-      setServerTime(res.serverTime);
+      if (user) {
+        const res = await api.getOpenQuestions();
+        setQuestions(res.questions);
+        setPredictions(res.predictions);
+        setServerTime(res.serverTime);
+      } else {
+        const res = await api.getPublicOpenQuestions();
+        setQuestions(res.questions);
+        setPredictions({});
+        setServerTime(res.serverTime);
+      }
     } catch {
       setQuestions([]);
       setPredictions({});
@@ -213,17 +217,76 @@ export function PredictionHub({ user }: PredictionHubProps) {
         </h2>
 
         {!user ? (
-          <div className="max-w-lg mx-auto bg-white rounded-2xl border border-slate-200 shadow-sm p-8 text-center">
-            <p className="text-slate-500 mb-6 text-sm">
-              Login with your registered mobile number to submit predictions.
-            </p>
-            <Link
-              href="/login"
-              className="inline-block bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold uppercase tracking-wider px-8 py-3.5 rounded-xl transition-colors"
-            >
-              Login to predict
-            </Link>
-          </div>
+          fetching ? (
+            <p className="text-center text-slate-500 py-12">Loading predictions...</p>
+          ) : questions.length === 0 ? (
+            <div className="max-w-lg mx-auto bg-white rounded-2xl border border-slate-200 shadow-sm p-8 text-center">
+              <p className="text-slate-500 mb-6 text-sm">
+                No open predictions right now. Register to be ready when the next match opens.
+              </p>
+              <Link
+                href="/register"
+                className="inline-block bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold uppercase tracking-wider px-8 py-3.5 rounded-xl transition-colors"
+              >
+                Register Now
+              </Link>
+              <p className="mt-4 text-sm text-slate-600">
+                Already registered?{" "}
+                <Link href="/login" className="font-semibold text-[#f97316] hover:underline">
+                  Login here
+                </Link>
+              </p>
+            </div>
+          ) : (
+            <div className="relative">
+              <div
+                className="blur-[6px] pointer-events-none select-none opacity-60"
+                aria-hidden="true"
+              >
+                <p className="text-center text-sm text-slate-500 mb-6">
+                  {questions.length} open question{questions.length !== 1 ? "s" : ""}
+                </p>
+                <div
+                  className={
+                    questions.length === 1
+                      ? "max-w-lg mx-auto w-full min-w-0"
+                      : "grid grid-cols-1 lg:grid-cols-2 gap-6 min-w-0"
+                  }
+                >
+                  {questions.map((question) => (
+                    <QuestionCard
+                      key={question.id}
+                      question={question}
+                      serverTime={serverTime}
+                      prediction={null}
+                      onSubmitted={() => {}}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="absolute inset-0 flex items-center justify-center px-4">
+                <div className="max-w-md w-full bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200 shadow-xl p-8 text-center">
+                  <h3 className="text-lg font-bold text-[#1a2b4b] mb-2">Register for prediction</h3>
+                  <p className="text-slate-500 text-sm mb-6">
+                    Create your free account to submit predictions and compete for the prize.
+                  </p>
+                  <Link
+                    href="/register"
+                    className="inline-block w-full sm:w-auto bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold uppercase tracking-wider px-8 py-3.5 rounded-xl transition-colors"
+                  >
+                    Register Now
+                  </Link>
+                  <p className="mt-4 text-sm text-slate-600">
+                    Already registered?{" "}
+                    <Link href="/login" className="font-semibold text-[#f97316] hover:underline">
+                      Login here
+                    </Link>
+                  </p>
+                </div>
+              </div>
+            </div>
+          )
         ) : fetching ? (
           <p className="text-center text-slate-500 py-12">Loading predictions...</p>
         ) : questions.length === 0 ? (

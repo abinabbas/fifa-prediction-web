@@ -59,7 +59,7 @@ export function LoginForm() {
             {error.includes("not registered") && (
               <>
                 {" "}
-                <Link href="/" className="underline font-semibold">
+                <Link href="/register" className="underline font-semibold">
                   Register
                 </Link>
               </>

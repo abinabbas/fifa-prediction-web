@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { PageContainer } from "@/components/launchpad/PageContainer";
 
 const terms = [
@@ -40,16 +39,9 @@ export function WinnerSelectionSection() {
             Every goal you predict could bring you one step closer to a successful digital marketing
             career.
           </p>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-8">
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
             Predict. Compete. Win. Kickstart Your Career with Datameris Launchpad.
           </p>
-
-          <Link
-            href="/"
-            className="inline-block bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold uppercase tracking-wider px-8 py-3.5 rounded-xl transition-colors"
-          >
-            Register Now
-          </Link>
         </div>
       </PageContainer>
     </section>

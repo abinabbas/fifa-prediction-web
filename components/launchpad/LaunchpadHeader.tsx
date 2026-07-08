@@ -17,7 +17,7 @@ export function LaunchpadHeader({ showNav = true }: LaunchpadHeaderProps) {
   const handleLogout = async () => {
     const isAdmin = user?.role === "admin";
     await logout();
-    router.push(isAdmin ? "/admin/login" : "/");
+    router.push(isAdmin ? "/admin/login" : "/home");
   };
 
   return (
@@ -64,12 +64,20 @@ export function LaunchpadHeader({ showNav = true }: LaunchpadHeaderProps) {
           )}
 
           {!loading && !user && showNav && (
-            <Link
-              href="/login"
-              className="text-xs font-bold uppercase tracking-wide px-4 py-2 rounded-lg bg-[#f97316] text-white hover:bg-[#ea580c] transition-colors"
-            >
-              Login
-            </Link>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Link
+                href="/login"
+                className="text-xs font-bold uppercase tracking-wide px-3 sm:px-4 py-2 rounded-lg border border-[#1a2b4b] text-[#1a2b4b] hover:bg-[#1a2b4b] hover:text-white transition-colors"
+              >
+                Login
+              </Link>
+              <Link
+                href="/register"
+                className="text-xs font-bold uppercase tracking-wide px-3 sm:px-4 py-2 rounded-lg bg-[#f97316] text-white hover:bg-[#ea580c] transition-colors"
+              >
+                Register
+              </Link>
+            </div>
           )}
         </div>
       </PageContainer>

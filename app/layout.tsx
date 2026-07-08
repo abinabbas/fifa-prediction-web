@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Barlow_Condensed, Inter } from "next/font/google";
 import { Providers } from "@/components/Providers";
+import { BRAND_APPLE_ICON_SRC, BRAND_FAVICON_SRC } from "@/lib/brand";
 import "./globals.css";
 
 const inter = Inter({
@@ -18,6 +19,11 @@ const barlowCondensed = Barlow_Condensed({
 export const metadata: Metadata = {
   title: "LAUNCHPAD — FIFA World Cup 2026 Prediction Contest",
   description: "Predict. Win. Launch Your Career. FIFA World Cup 2026 Prediction Contest by Datameris Launchpad.",
+  icons: {
+    icon: [{ url: BRAND_FAVICON_SRC, type: "image/png" }],
+    shortcut: [{ url: BRAND_FAVICON_SRC, type: "image/png" }],
+    apple: [{ url: BRAND_APPLE_ICON_SRC, type: "image/png" }],
+  },
 };
 
 export default function RootLayout({
