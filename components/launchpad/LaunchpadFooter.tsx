@@ -90,9 +90,14 @@ export function LaunchpadFooter() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
           {/* Brand */}
           <div>
-            <h3 className="text-white font-extrabold tracking-[0.08em] text-sm sm:text-base mb-4">
-              DATAMERIS LAUNCHPAD
-            </h3>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://res.cloudinary.com/delrmm6pq/image/upload/e_trim,w_480,c_limit,q_auto,f_auto/v1783513586/WhatsAppImage2026-06-15at5.12.00PM_pnvatj.webp"
+              alt="Datameris Launchpad"
+              width={460}
+              height={100}
+              className="h-7 sm:h-8 w-auto object-contain mb-4"
+            />
             <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.65)" }}>
               Bridging the gap between academic learning and real industry expectations through
               mentorship, practical execution, and career-focused learning experiences.
