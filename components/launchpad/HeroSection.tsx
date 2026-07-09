@@ -24,7 +24,7 @@ export function HeroSection() {
           />
         </div>
 
-        <div className="absolute inset-0 overflow-visible">
+        <div className="absolute inset-0 overflow-hidden">
         {/* Left: FREE KICK START CHALLENGE */}
         <div className="absolute left-[6%] sm:left-[8%] lg:left-[10%] top-[18%] sm:top-[21%] lg:top-[24%] pointer-events-none w-[min(75%,42vw)] max-w-[34rem]">
           <div className="hero-title-block">

@@ -85,8 +85,8 @@ const quickLinks = [
 
 export function LaunchpadFooter() {
   return (
-    <footer className="mt-auto" style={{ backgroundColor: "#312e81" }}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-14">
+    <footer style={{ backgroundColor: "#312e81" }}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
           {/* Brand */}
           <div>

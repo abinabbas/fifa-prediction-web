@@ -107,14 +107,22 @@ export default function AdminPage() {
                         Closes: {new Date(q.closesAt).toLocaleString()} · {total} prediction{total !== 1 ? "s" : ""}
                       </p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => removeQuestion(q.id, q.title)}
-                      disabled={removingId === q.id}
-                      className="text-xs font-semibold text-red-600 hover:text-red-700 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-50 disabled:opacity-50 whitespace-nowrap"
-                    >
-                      {removingId === q.id ? "Removing..." : "Remove question"}
-                    </button>
+                    <div className="flex flex-wrap gap-2">
+                      <Link
+                        href={`/admin/questions/${q.id}/edit`}
+                        className="text-xs font-semibold text-navy hover:text-orange px-3 py-1.5 rounded-lg border border-border hover:bg-background whitespace-nowrap"
+                      >
+                        Edit question
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => removeQuestion(q.id, q.title)}
+                        disabled={removingId === q.id}
+                        className="text-xs font-semibold text-red-600 hover:text-red-700 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-50 disabled:opacity-50 whitespace-nowrap"
+                      >
+                        {removingId === q.id ? "Removing..." : "Remove question"}
+                      </button>
+                    </div>
                   </div>
 
                   <div className="space-y-3">

@@ -20,7 +20,7 @@ const steps = [
     num: 3,
     Icon: Trophy,
     title: "Win Professional Course",
-    desc: "Top 10 leaderboard participants earn full career scholarships.",
+    desc: "10 qualified winners selected after screening earn full career scholarships.",
   },
 ];
 

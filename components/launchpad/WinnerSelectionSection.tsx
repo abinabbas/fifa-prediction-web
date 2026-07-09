@@ -10,7 +10,7 @@ const terms = [
 
 export function WinnerSelectionSection() {
   return (
-    <section className="py-8 sm:py-20 bg-white">
+    <section className="bg-white pt-8 pb-0 sm:pt-12">
       <PageContainer>
         <div className="max-w-3xl">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-6">
@@ -18,11 +18,13 @@ export function WinnerSelectionSection() {
           </h2>
 
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-4">
-            The Top 10 participants with the highest prediction scores will win our exclusive
-            AI-Integrated Digital Marketing Course worth ₹1.5 Lakh—completely FREE.
+            After the FIFA World Cup Final, all eligible participants will undergo a screening and
+            verification process. Based on the screening criteria, 10 qualified participants will be
+            selected as winners.
           </p>
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-10">
-            Winners will be announced on 20th July after the FIFA World Cup Final.
+            Each selected winner will receive our AI-Integrated Digital Marketing Course worth ₹1.5
+            Lakh, absolutely FREE.
           </p>
 
           <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-4">

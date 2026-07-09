@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { api, ApiError } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { LaunchpadHeader } from "@/components/launchpad/LaunchpadHeader";
@@ -13,20 +13,17 @@ import {
 } from "@/components/launchpad/QuestionFormFields";
 import { toApiOptions } from "@/lib/questionForm";
 
-const DEFAULT_OPTIONS: QuestionOptionRow[] = [
-  { label: "Team A WIN", flagIso: "" },
-  { label: "DRAW", flagIso: "" },
-  { label: "Team B WIN", flagIso: "" },
-];
-
-export default function NewQuestionPage() {
+export default function EditQuestionPage() {
   const router = useRouter();
+  const params = useParams();
+  const questionId = params.id as string;
   const { user, loading: authLoading } = useAuth();
-  const [title, setTitle] = useState("Who will win?");
-  const [options, setOptions] = useState<QuestionOptionRow[]>(DEFAULT_OPTIONS);
+  const [title, setTitle] = useState("");
+  const [options, setOptions] = useState<QuestionOptionRow[]>([]);
   const [closesAt, setClosesAt] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
 
   useEffect(() => {
     if (!authLoading) {
@@ -34,6 +31,27 @@ export default function NewQuestionPage() {
       else if (user.role !== "admin") router.push("/");
     }
   }, [authLoading, user, router]);
+
+  useEffect(() => {
+    if (user?.role !== "admin" || !questionId) return;
+
+    setFetching(true);
+    api
+      .getAdminQuestion(questionId)
+      .then((res) => {
+        setTitle(res.question.title);
+        setOptions(
+          res.question.options.map((option) => ({
+            id: option.id,
+            label: option.label,
+            flagIso: option.flagIso || "",
+          }))
+        );
+        setClosesAt(res.question.closesAt);
+      })
+      .catch(() => setError("Failed to load question"))
+      .finally(() => setFetching(false));
+  }, [user, questionId]);
 
   const addOption = () => {
     if (options.length < 6) setOptions([...options, { label: "", flagIso: "" }]);
@@ -53,7 +71,8 @@ export default function NewQuestionPage() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    const filled = options.filter((o) => o.label.trim());
+
+    const filled = options.filter((option) => option.label.trim());
     if (filled.length < 2) {
       setError("Please provide at least 2 options");
       setLoading(false);
@@ -67,14 +86,14 @@ export default function NewQuestionPage() {
     }
 
     try {
-      await api.createQuestion({
+      await api.updateQuestion(questionId, {
         title,
         options: toApiOptions(filled),
         closesAt,
       });
       router.push("/admin");
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Failed to create question");
+      setError(err instanceof ApiError ? err.message : "Failed to update question");
     } finally {
       setLoading(false);
     }
@@ -99,24 +118,28 @@ export default function NewQuestionPage() {
 
         <div className="launchpad-card p-6 sm:p-8">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-navy flex items-center justify-center text-white">+</div>
-            <h1 className="text-xl font-black text-navy">Add Prediction Question</h1>
+            <div className="w-10 h-10 rounded-xl bg-navy flex items-center justify-center text-white">✎</div>
+            <h1 className="text-xl font-black text-navy">Edit Prediction Question</h1>
           </div>
 
-          <QuestionFormFields
-            title={title}
-            options={options}
-            closesAt={closesAt}
-            error={error}
-            loading={loading}
-            submitLabel="Create Question"
-            onTitleChange={setTitle}
-            onClosesAtChange={setClosesAt}
-            onOptionChange={updateOption}
-            onAddOption={addOption}
-            onRemoveOption={removeOption}
-            onSubmit={handleSubmit}
-          />
+          {fetching ? (
+            <p className="text-muted text-center py-8">Loading question...</p>
+          ) : (
+            <QuestionFormFields
+              title={title}
+              options={options}
+              closesAt={closesAt}
+              error={error}
+              loading={loading}
+              submitLabel="Save Changes"
+              onTitleChange={setTitle}
+              onClosesAtChange={setClosesAt}
+              onOptionChange={updateOption}
+              onAddOption={addOption}
+              onRemoveOption={removeOption}
+              onSubmit={handleSubmit}
+            />
+          )}
         </div>
       </main>
 

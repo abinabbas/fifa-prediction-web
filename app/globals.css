@@ -29,6 +29,11 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  overflow-x: clip;
+}
+
+html {
+  overflow-x: clip;
 }
 
 .hero-title-block {
@@ -241,4 +246,82 @@ body {
 
 .register-btn-secondary:hover {
   background: #f8fafc;
+}
+
+@keyframes flag-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.flag-marquee-viewport {
+  overflow: hidden;
+}
+
+.flag-marquee-track {
+  display: flex;
+  width: max-content;
+  flex-wrap: nowrap;
+  animation: flag-marquee-scroll 40s linear infinite;
+  will-change: transform;
+}
+
+.flag-marquee-group {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.flag-marquee-item {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline: 1rem;
+  white-space: nowrap;
+}
+
+.flag-marquee-outer {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: -1px;
+  margin-top: 2.5rem;
+}
+
+@media (min-width: 640px) {
+  .flag-marquee-outer {
+    margin-top: 3rem;
+  }
+}
+
+.flag-marquee-inner {
+  overflow: hidden;
+  background-color: #1e40af;
+  padding-block: 0.75rem;
+  box-shadow: 0 8px 24px rgba(30, 58, 138, 0.25);
+}
+
+.prediction-hub-section {
+  position: relative;
+  overflow: hidden;
+  background: #fafafa;
+}
+
+.prediction-hub-grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(rgba(147, 197, 253, 0.45) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(147, 197, 253, 0.45) 1px, transparent 1px);
+  background-size: 42px 42px;
+  opacity: 0.4;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), transparent 95%);
 }

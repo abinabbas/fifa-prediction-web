@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   Sparkles,
   Users,
@@ -11,6 +12,8 @@ import {
   Zap,
 } from "lucide-react";
 import { PageContainer } from "@/components/launchpad/PageContainer";
+import { api, type MarqueeTeam } from "@/lib/api";
+import { getFlagImageUrl, TEAM_FLAGS } from "@/lib/teamFlags";
 
 const features = [
   {
@@ -61,16 +64,45 @@ const stats = [
   { value: "100%", label: "Scholarship" },
   { value: "10 Winners", label: "Scholarship Seats" },
   { value: "Daily", label: "Prediction Challenges" },
-  { value: "100% Free", label: "Participation" },
 ];
 
+const FALLBACK_MARQUEE_TEAMS: MarqueeTeam[] = TEAM_FLAGS.map((team) => ({
+  code: team.code,
+  iso: team.iso,
+  label: team.name,
+}));
+
+function expandMarqueeTeams(teams: MarqueeTeam[], minItems = 32): MarqueeTeam[] {
+  if (teams.length === 0) return [];
+  const expanded: MarqueeTeam[] = [];
+  for (let i = 0; i < minItems; i += 1) {
+    expanded.push(teams[i % teams.length]);
+  }
+  return expanded;
+}
+
 export function MentorshipSection() {
+  const [marqueeTeams, setMarqueeTeams] = useState<MarqueeTeam[]>(FALLBACK_MARQUEE_TEAMS);
+
+  useEffect(() => {
+    api
+      .getMarqueeTeams()
+      .then((res) => {
+        if (res.teams.length > 0) setMarqueeTeams(res.teams);
+      })
+      .catch(() => {
+        setMarqueeTeams(FALLBACK_MARQUEE_TEAMS);
+      });
+  }, []);
+
   const scrollToPredict = () => {
     document.getElementById("predict")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const loopTeams = expandMarqueeTeams(marqueeTeams);
+
   return (
-    <section className="py-8 sm:py-16" id="prize" style={{ backgroundColor: "#fafafa" }}>
+    <section className="overflow-x-clip pb-0 pt-8 sm:pt-16" id="prize" style={{ backgroundColor: "#fafafa" }}>
       <PageContainer>
         <div
           className="rounded-3xl p-4 sm:p-10 lg:p-12 shadow-xl"
@@ -111,6 +143,13 @@ export function MentorshipSection() {
                 <Trophy className="w-4 h-4" />
                 Course Worth ₹1,50,000
               </div>
+
+              <span
+                className="mt-4 self-center inline-flex items-center rounded-full px-4 py-2 text-xs sm:text-sm font-semibold text-white"
+                style={{ border: "1px solid rgba(255,255,255,0.35)", backgroundColor: "rgba(255,255,255,0.08)" }}
+              >
+                Exclusively Awarded to 10 Winners
+              </span>
 
               <p
                 className="mt-5 lg:hidden text-sm sm:text-base leading-relaxed"
@@ -178,9 +217,9 @@ export function MentorshipSection() {
           className="mt-6 rounded-2xl shadow-sm px-4 py-7 sm:py-8"
           style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0" }}
         >
-          <div className="grid grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6 text-center divide-x divide-slate-200">
+          <div className="grid grid-cols-3 gap-4 sm:gap-6 text-center divide-x divide-slate-200">
             {stats.map((s) => (
-              <div key={s.label} className={s.label === "Prediction Challenges" ? "hidden md:block" : ""}>
+              <div key={s.label}>
                 <p className="text-base sm:text-xl font-extrabold" style={{ color: "#1e293b" }}>
                   {s.value}
                 </p>
@@ -190,6 +229,38 @@ export function MentorshipSection() {
           </div>
         </div>
       </PageContainer>
+
+      {/* Full-bleed marquee — sits flush against Prediction Hub below */}
+      <div className="flag-marquee-outer w-full">
+        <div className="flag-marquee-inner">
+          <div className="flag-marquee-viewport">
+            <div className="flag-marquee-track">
+              {[0, 1].map((copy) => (
+                <div key={copy} className="flag-marquee-group" aria-hidden={copy === 1 ? true : undefined}>
+                  {loopTeams.map((team, index) => (
+                    <div key={`${copy}-${team.iso}-${index}`} className="flag-marquee-item">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={getFlagImageUrl(team.iso)}
+                        alt={copy === 0 ? `${team.code} flag` : ""}
+                        width={20}
+                        height={20}
+                        className="h-5 w-5 shrink-0 rounded-full object-cover"
+                      />
+                      <span className="text-[11px] font-bold tracking-wide text-white sm:text-xs">
+                        {team.code}
+                      </span>
+                      <span className="text-[10px] text-white/50" aria-hidden="true">
+                        •
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

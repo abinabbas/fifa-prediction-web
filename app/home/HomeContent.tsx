@@ -9,6 +9,7 @@ import { HeroSection } from "@/components/launchpad/HeroSection";
 import { StepsSection } from "@/components/launchpad/StepsSection";
 import { MentorshipSection } from "@/components/launchpad/MentorshipSection";
 import { WinnerSelectionSection } from "@/components/launchpad/WinnerSelectionSection";
+import { ExperienceSection } from "@/components/launchpad/ExperienceSection";
 import { PredictionHub } from "@/components/launchpad/PredictionHub";
 import { LeaderboardSection } from "@/components/launchpad/LeaderboardSection";
 
@@ -33,7 +34,7 @@ export function HomeContent() {
   }, [searchParams]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fafafa]">
+    <div className="flex min-h-screen flex-col overflow-x-clip overflow-y-visible bg-[#fafafa]">
       <LaunchpadHeader />
 
       <HeroSection />
@@ -42,6 +43,7 @@ export function HomeContent() {
       <PredictionHub user={loading ? null : user} />
       <LeaderboardSection user={loading ? null : user} />
       <WinnerSelectionSection />
+      <ExperienceSection />
       <LaunchpadFooter />
     </div>
   );

@@ -61,6 +61,8 @@ export interface RegisterData {
 export interface QuestionOption {
   id: string;
   label: string;
+  flagIso?: string;
+  flagCode?: string;
 }
 
 export interface Question {
@@ -138,6 +140,17 @@ export interface LeaderboardEntry {
   correctCount: number;
 }
 
+export interface PublicLeaderboardResponse {
+  totalParticipants: number;
+  serverTime: string;
+}
+
+export interface MarqueeTeam {
+  code: string;
+  iso: string;
+  label: string;
+}
+
 export const api = {
   register: (data: RegisterData) =>
     request<{ user: User }>("/api/auth/register", {
@@ -169,6 +182,9 @@ export const api = {
   getPublicOpenQuestions: () =>
     request<{ questions: Question[]; serverTime: string }>("/api/questions/open/public"),
 
+  getMarqueeTeams: () =>
+    request<{ teams: MarqueeTeam[]; serverTime: string }>("/api/questions/teams/marquee"),
+
   submitPrediction: (questionId: string, selectedOptionId: string) =>
     request<{ prediction: { id: string; selectedOptionId: string; createdAt: string } }>(
       "/api/predictions",
@@ -181,15 +197,25 @@ export const api = {
   getUserLeaderboard: () =>
     request<UserLeaderboardResponse>("/api/predictions/leaderboard"),
 
+  getPublicLeaderboard: () =>
+    request<PublicLeaderboardResponse>("/api/predictions/leaderboard/public"),
+
   getAdminQuestions: () =>
     request<{ questions: AdminQuestion[]; serverTime: string }>("/api/admin/questions"),
+
+  getAdminQuestion: (id: string) =>
+    request<{ question: Question; serverTime: string }>(`/api/admin/questions/${id}`),
 
   getLeaderboard: () =>
     request<{ leaderboard: LeaderboardEntry[]; totalQuestions: number; serverTime: string }>(
       "/api/admin/leaderboard"
     ),
 
-  createQuestion: (data: { title: string; options: { label: string }[]; closesAt: string }) =>
+  createQuestion: (data: {
+    title: string;
+    options: { label: string; flagIso?: string; flagCode?: string }[];
+    closesAt: string;
+  }) =>
     request<{ question: Question }>("/api/admin/questions", {
       method: "POST",
       body: JSON.stringify(data),
@@ -197,7 +223,13 @@ export const api = {
 
   updateQuestion: (
     id: string,
-    data: { correctOptionId?: string; isActive?: boolean; closesAt?: string }
+    data: {
+      title?: string;
+      options?: { id?: string; label: string; flagIso?: string; flagCode?: string }[];
+      correctOptionId?: string;
+      isActive?: boolean;
+      closesAt?: string;
+    }
   ) =>
     request<{ question: Question }>(`/api/admin/questions/${id}`, {
       method: "PATCH",
