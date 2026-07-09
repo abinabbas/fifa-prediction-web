@@ -1,6 +1,23 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        // Force HTTPS: redirect any request that arrived over plain HTTP
+        source: "/:path*",
+        has: [
+          {
+            type: "header",
+            key: "x-forwarded-proto",
+            value: "http",
+          },
+        ],
+        permanent: true,
+        destination: "https://worldcup.datamerislaunchpad.com/:path*",
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
