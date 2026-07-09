@@ -10,6 +10,7 @@ import { StepsSection } from "@/components/launchpad/StepsSection";
 import { MentorshipSection } from "@/components/launchpad/MentorshipSection";
 import { WinnerSelectionSection } from "@/components/launchpad/WinnerSelectionSection";
 import { PredictionHub } from "@/components/launchpad/PredictionHub";
+import { LeaderboardSection } from "@/components/launchpad/LeaderboardSection";
 
 export function HomeContent() {
   const searchParams = useSearchParams();
@@ -39,6 +40,7 @@ export function HomeContent() {
       <StepsSection />
       <MentorshipSection />
       <PredictionHub user={loading ? null : user} />
+      <LeaderboardSection user={loading ? null : user} />
       <WinnerSelectionSection />
       <LaunchpadFooter />
     </div>

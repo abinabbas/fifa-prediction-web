@@ -111,6 +111,22 @@ export interface QuestionResults {
   predictions: PredictionRow[];
 }
 
+export interface UserLeaderboardRow {
+  rank: number;
+  fullName: string;
+  district: string;
+  correctCount: number;
+  predictionCount: number;
+  isYou: boolean;
+}
+
+export interface UserLeaderboardResponse {
+  top: UserLeaderboardRow[];
+  you: { rank: number; correctCount: number; predictionCount: number } | null;
+  totalParticipants: number;
+  serverTime: string;
+}
+
 export interface LeaderboardEntry {
   userId: string;
   fullName: string;
@@ -161,6 +177,9 @@ export const api = {
         body: JSON.stringify({ questionId, selectedOptionId }),
       }
     ),
+
+  getUserLeaderboard: () =>
+    request<UserLeaderboardResponse>("/api/predictions/leaderboard"),
 
   getAdminQuestions: () =>
     request<{ questions: AdminQuestion[]; serverTime: string }>("/api/admin/questions"),

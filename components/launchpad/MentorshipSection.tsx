@@ -8,8 +8,6 @@ import {
   Award,
   TrendingUp,
   Trophy,
-  Calendar,
-  Medal,
   Zap,
 } from "lucide-react";
 import { PageContainer } from "@/components/launchpad/PageContainer";
@@ -107,7 +105,7 @@ export function MentorshipSection() {
               </p>
 
               <div
-                className="mt-5 lg:mt-7 inline-flex items-center gap-2 rounded-lg px-4 sm:px-5 py-2 sm:py-2.5 text-sm sm:text-base font-extrabold"
+                className="mt-8 lg:mt-10 self-center inline-flex items-center gap-2 rounded-lg px-4 sm:px-5 py-2 sm:py-2.5 text-sm sm:text-base font-extrabold"
                 style={{ backgroundColor: "#facc15", color: "#1e293b" }}
               >
                 <Trophy className="w-4 h-4" />
@@ -123,28 +121,11 @@ export function MentorshipSection() {
                 AI-integrated Digital Marketing.
               </p>
 
-              <div className="mt-5 flex flex-wrap gap-2.5">
-                <span
-                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-white"
-                  style={{ backgroundColor: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.18)" }}
-                >
-                  <Calendar className="w-3.5 h-3.5" style={{ color: "#a78bfa" }} />
-                  7 Months
-                </span>
-                <span
-                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-white"
-                  style={{ backgroundColor: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.18)" }}
-                >
-                  <Medal className="w-3.5 h-3.5" style={{ color: "#facc15" }} />
-                  Certificate on Completion
-                </span>
-              </div>
-
               {/* Desktop button (mobile version is below the feature cards) */}
               <button
                 type="button"
                 onClick={scrollToPredict}
-                className="hidden lg:inline-block mt-8 text-white text-sm sm:text-base font-bold px-12 py-4 rounded-full transition-colors hover:brightness-95 shadow-lg"
+                className="hidden lg:inline-block mt-12 self-center text-white text-sm sm:text-base font-bold px-12 py-4 rounded-full transition-colors hover:brightness-95 shadow-lg"
                 style={{ backgroundColor: "#f97316" }}
               >
                 Start Predicting
