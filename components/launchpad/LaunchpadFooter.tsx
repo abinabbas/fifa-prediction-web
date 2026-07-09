@@ -95,7 +95,7 @@ export function LaunchpadFooter() {
               src="https://res.cloudinary.com/delrmm6pq/image/upload/e_trim,w_480,c_limit,q_auto,f_auto/v1783513586/WhatsAppImage2026-06-15at5.12.00PM_pnvatj.webp"
               alt="Datameris Launchpad"
               width={460}
-              height={100}
+              height={100}                                                                                                                                                                                                                                                                                                                                                                                                                                                  
               className="h-7 sm:h-8 w-auto object-contain mb-4"
             />
             <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.65)" }}>

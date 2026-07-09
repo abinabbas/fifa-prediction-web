@@ -14,7 +14,7 @@ const labelClass =
 const inputClass =
   "block w-full px-3.5 py-[11px] border border-[#dde3ec] rounded-lg bg-white text-sm text-slate-800 placeholder:text-[#b0bac8] focus:outline-none focus:border-[#1a2b4b] focus:ring-2 focus:ring-[#1a2b4b]/10";
 
-const INTEREST_OPTIONS = ["Digital Marketing", "Coding", "Cybersecurity", "Data Science"];
+const INTEREST_OPTIONS = ["Digital Marketing", "Coding", "Cybersecurity", "Data Science", "Other"];
 
 const LEARNING_MODES = ["Online", "Offline", "Hybrid"];
 
