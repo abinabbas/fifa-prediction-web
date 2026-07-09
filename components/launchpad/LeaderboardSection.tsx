@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { MapPin, Sparkles, Trophy, Users } from "lucide-react";
-import { api, type User, type UserLeaderboardResponse } from "@/lib/api";
+import { api, type User } from "@/lib/api";
 import { getFlagImageUrl } from "@/lib/teamFlags";
 import { PageContainer } from "@/components/launchpad/PageContainer";
 
@@ -38,27 +38,15 @@ const QUARTER_FINALS = [
 ];
 
 function formatParticipants(count: number | null | undefined): string {
-  if (count == null) return "—";
+  if (count == null) return "10K+";
   if (count >= 10000) return `${Math.floor(count / 1000)}K+`;
   if (count >= 1000) return `${(count / 1000).toFixed(1).replace(/\.0$/, "")}K+`;
   return String(count);
 }
 
-function formatRank(rank: number | null | undefined): string {
-  if (rank == null) return "—";
-  return `#${rank}`;
-}
-
-function getPositionBadge(rank: number | null | undefined): string {
-  if (rank == null) return "Unranked";
-  if (rank <= 20) return "Gold Position";
-  if (rank <= 100) return "Silver Position";
-  return "Keep Climbing";
-}
-
 export function LeaderboardSection({ user }: { user: User | null }) {
-  const [data, setData] = useState<UserLeaderboardResponse | null>(null);
   const [totalParticipants, setTotalParticipants] = useState<number | null>(null);
+  const [showRank, setShowRank] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -67,23 +55,15 @@ export function LeaderboardSection({ user }: { user: User | null }) {
     const load = async () => {
       setLoading(true);
       try {
-        if (user) {
-          const res = await api.getUserLeaderboard();
-          if (!cancelled) {
-            setData(res);
-            setTotalParticipants(res.totalParticipants);
-          }
-        } else {
-          const res = await api.getPublicLeaderboard();
-          if (!cancelled) {
-            setData(null);
-            setTotalParticipants(res.totalParticipants);
-          }
+        const publicRes = await api.getPublicLeaderboard();
+        if (!cancelled) {
+          setTotalParticipants(publicRes.totalParticipants);
+          setShowRank(publicRes.showRank);
         }
       } catch {
         if (!cancelled) {
-          setData(null);
           setTotalParticipants(null);
+          setShowRank(false);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -94,12 +74,10 @@ export function LeaderboardSection({ user }: { user: User | null }) {
     return () => {
       cancelled = true;
     };
-  }, [user]);
+  }, []);
 
-  const rank = data?.you?.rank ?? null;
-  const rankLabel = formatRank(rank);
   const participantLabel = formatParticipants(totalParticipants);
-  const positionBadge = getPositionBadge(rank);
+  const rankLabel = loading ? "..." : "—";
 
   return (
     <section className="bg-[#fafafa] py-8 sm:py-12" id="leaderboard">
@@ -118,12 +96,9 @@ export function LeaderboardSection({ user }: { user: User | null }) {
             <div className="rounded-2xl border border-slate-200 bg-white px-6 py-7 text-center shadow-sm">
               <Trophy className="mx-auto mb-3 h-6 w-6 text-[#d97706]" />
               <p className="text-3xl font-extrabold tracking-tight text-[#1a2b4b] sm:text-4xl">
-                {loading ? "..." : rankLabel}
+                {rankLabel}
               </p>
               <p className="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-slate-400">Your Rank</p>
-              <span className="mt-4 inline-flex rounded-full bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] px-5 py-1.5 text-xs font-bold text-white shadow-sm">
-                {loading ? "..." : positionBadge}
-              </span>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-white px-6 py-7 text-center shadow-sm">
@@ -137,22 +112,21 @@ export function LeaderboardSection({ user }: { user: User | null }) {
 
           <div className="mt-5 flex items-center gap-3 rounded-xl border border-[#fde68a] bg-[#fffbeb] px-4 py-3.5 sm:px-5">
             <Sparkles className="h-4 w-4 shrink-0 text-[#d97706]" />
-            <p className="text-sm text-slate-600">
-              {!user ? (
+            <p className="text-sm text-[#9a3412]">
+              {!showRank ? (
                 <>
-                  Join <span className="font-bold text-[#1a2b4b]">{participantLabel}</span> participants — register
-                  and submit your first prediction to appear on the board!
+                  Match results are being verified — rankings will be updated after screening. Keep
+                  predicting to stay in the running among {participantLabel} participants!
                 </>
-              ) : rank == null ? (
+              ) : !user ? (
                 <>
-                  You haven&apos;t made any predictions yet — submit one to get your rank among{" "}
-                  <span className="font-bold text-[#1a2b4b]">{participantLabel}</span> participants!
+                  Join {participantLabel} participants — register and submit your first prediction to
+                  appear on the board!
                 </>
               ) : (
                 <>
-                  You&apos;re ranked <span className="font-bold text-[#1a2b4b]">{rankLabel}</span> out of{" "}
-                  <span className="font-bold text-[#1a2b4b]">{participantLabel}</span> participants — keep predicting
-                  to climb the board!
+                  Keep predicting among {participantLabel} participants — final rankings will be
+                  announced after screening!
                 </>
               )}
             </p>

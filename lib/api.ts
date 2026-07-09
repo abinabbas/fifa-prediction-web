@@ -142,6 +142,7 @@ export interface LeaderboardEntry {
 
 export interface PublicLeaderboardResponse {
   totalParticipants: number;
+  showRank: boolean;
   serverTime: string;
 }
 
