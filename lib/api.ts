@@ -52,6 +52,10 @@ export interface RegisterData {
   email: string;
   college: string;
   district: string;
+  currentJob: string;
+  interestedIn: string;
+  expectedSalary: string;
+  learningMode: string;
 }
 
 export interface QuestionOption {

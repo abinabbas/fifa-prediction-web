@@ -14,6 +14,10 @@ const labelClass =
 const inputClass =
   "block w-full px-3.5 py-[11px] border border-[#dde3ec] rounded-lg bg-white text-sm text-slate-800 placeholder:text-[#b0bac8] focus:outline-none focus:border-[#1a2b4b] focus:ring-2 focus:ring-[#1a2b4b]/10";
 
+const INTEREST_OPTIONS = ["Digital Marketing", "Coding", "Cybersecurity", "Data Science"];
+
+const LEARNING_MODES = ["Online", "Offline", "Hybrid"];
+
 export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirect?: string }) {
   const router = useRouter();
   const { setUser } = useAuth();
@@ -23,6 +27,10 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
     email: "",
     college: "",
     district: "",
+    currentJob: "",
+    interestedIn: "",
+    expectedSalary: "",
+    learningMode: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -96,7 +104,7 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
           <div>
             <label htmlFor="college" className={labelClass}>College/Work</label>
             <input
@@ -122,6 +130,76 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
                 <option value="">Select District</option>
                 {KERALA_DISTRICTS.map((d) => (
                   <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">
+                ▼
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+          <div>
+            <label htmlFor="currentJob" className={labelClass}>Current Job</label>
+            <input
+              id="currentJob"
+              type="text"
+              value={form.currentJob}
+              onChange={(e) => update("currentJob", e.target.value)}
+              placeholder="e.g. Student / Job title"
+              className={inputClass}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="interestedIn" className={labelClass}>Interested In</label>
+            <div className="relative">
+              <select
+                id="interestedIn"
+                value={form.interestedIn}
+                onChange={(e) => update("interestedIn", e.target.value)}
+                className={`${inputClass} appearance-none pr-10`}
+                required
+              >
+                <option value="">Select Interest</option>
+                {INTEREST_OPTIONS.map((opt) => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">
+                ▼
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
+          <div>
+            <label htmlFor="expectedSalary" className={labelClass}>Expected Salary</label>
+            <input
+              id="expectedSalary"
+              type="text"
+              value={form.expectedSalary}
+              onChange={(e) => update("expectedSalary", e.target.value)}
+              placeholder="e.g. 3-5 LPA"
+              className={inputClass}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="learningMode" className={labelClass}>Preferred Learning Mode</label>
+            <div className="relative">
+              <select
+                id="learningMode"
+                value={form.learningMode}
+                onChange={(e) => update("learningMode", e.target.value)}
+                className={`${inputClass} appearance-none pr-10`}
+                required
+              >
+                <option value="">Select Mode</option>
+                {LEARNING_MODES.map((mode) => (
+                  <option key={mode} value={mode}>{mode}</option>
                 ))}
               </select>
               <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">
