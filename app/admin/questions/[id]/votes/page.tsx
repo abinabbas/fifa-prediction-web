@@ -19,6 +19,10 @@ function formatPhone(phone: string) {
   return phone;
 }
 
+function showValue(value?: string) {
+  return value?.trim() ? value : "—";
+}
+
 export default function QuestionVotesPage() {
   const router = useRouter();
   const params = useParams();
@@ -198,6 +202,10 @@ export default function QuestionVotesPage() {
                         <th className="px-4 py-3.5">Email</th>
                         <th className="px-4 py-3.5">College</th>
                         <th className="px-4 py-3.5">District</th>
+                        <th className="px-4 py-3.5">Current Job</th>
+                        <th className="px-4 py-3.5">Interested In</th>
+                        <th className="px-4 py-3.5">Expected Salary</th>
+                        <th className="px-4 py-3.5">Learning Mode</th>
                         <th className="px-4 py-3.5">Prediction</th>
                         <th className="px-4 py-3.5">Submitted</th>
                         {question.correctOptionId && <th className="px-4 py-3.5">Result</th>}
@@ -212,8 +220,14 @@ export default function QuestionVotesPage() {
                             {formatPhone(row.phone)}
                           </td>
                           <td className="px-4 py-3.5 text-slate-600">{row.email}</td>
-                          <td className="px-4 py-3.5 text-slate-600">{row.college}</td>
+                          <td className="px-4 py-3.5 text-slate-600">{showValue(row.college)}</td>
                           <td className="px-4 py-3.5 text-slate-600">{row.district}</td>
+                          <td className="px-4 py-3.5 text-slate-600">{showValue(row.currentJob)}</td>
+                          <td className="px-4 py-3.5 text-slate-600">{showValue(row.interestedIn)}</td>
+                          <td className="px-4 py-3.5 text-slate-600 whitespace-nowrap">
+                            {showValue(row.expectedSalary)}
+                          </td>
+                          <td className="px-4 py-3.5 text-slate-600">{showValue(row.learningMode)}</td>
                           <td className="px-4 py-3.5">
                             <span className="inline-block px-2.5 py-1 rounded-md bg-[#eef1f6] text-[#1a2b4b] font-semibold text-xs">
                               {row.selectedOptionLabel}

@@ -99,6 +99,10 @@ export interface PredictionRow {
   email: string;
   college: string;
   district: string;
+  currentJob: string;
+  interestedIn: string;
+  expectedSalary: string;
+  learningMode: string;
   selectedOptionId: string;
   selectedOptionLabel: string;
   predictedAt: string;
@@ -136,6 +140,10 @@ export interface LeaderboardEntry {
   email: string;
   college: string;
   district: string;
+  currentJob?: string;
+  interestedIn?: string;
+  expectedSalary?: string;
+  learningMode?: string;
   predictionCount: number;
   correctCount: number;
 }

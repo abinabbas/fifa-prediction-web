@@ -16,6 +16,10 @@ function formatPhone(phone: string) {
   return phone;
 }
 
+function showValue(value?: string) {
+  return value?.trim() ? value : "—";
+}
+
 export default function AdminLeaderboardPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
@@ -96,8 +100,13 @@ export default function AdminLeaderboardPage() {
                     <th className="px-4 py-3.5 w-14">Rank</th>
                     <th className="px-4 py-3.5">Name</th>
                     <th className="px-4 py-3.5">Phone</th>
+                    <th className="px-4 py-3.5">Email</th>
                     <th className="px-4 py-3.5">College</th>
                     <th className="px-4 py-3.5">District</th>
+                    <th className="px-4 py-3.5">Current Job</th>
+                    <th className="px-4 py-3.5">Interested In</th>
+                    <th className="px-4 py-3.5">Expected Salary</th>
+                    <th className="px-4 py-3.5">Learning Mode</th>
                     <th className="px-4 py-3.5 text-center">Predictions</th>
                     <th className="px-4 py-3.5 text-center">Correct</th>
                   </tr>
@@ -124,8 +133,15 @@ export default function AdminLeaderboardPage() {
                       <td className="px-4 py-3.5 text-slate-600 whitespace-nowrap">
                         {formatPhone(row.phone)}
                       </td>
-                      <td className="px-4 py-3.5 text-slate-600">{row.college}</td>
+                      <td className="px-4 py-3.5 text-slate-600">{row.email}</td>
+                      <td className="px-4 py-3.5 text-slate-600">{showValue(row.college)}</td>
                       <td className="px-4 py-3.5 text-slate-600">{row.district}</td>
+                      <td className="px-4 py-3.5 text-slate-600">{showValue(row.currentJob)}</td>
+                      <td className="px-4 py-3.5 text-slate-600">{showValue(row.interestedIn)}</td>
+                      <td className="px-4 py-3.5 text-slate-600 whitespace-nowrap">
+                        {showValue(row.expectedSalary)}
+                      </td>
+                      <td className="px-4 py-3.5 text-slate-600">{showValue(row.learningMode)}</td>
                       <td className="px-4 py-3.5 text-center">
                         <span className="inline-flex min-w-[2rem] justify-center px-2.5 py-1 rounded-md bg-[#f97316]/10 text-[#f97316] font-bold text-xs">
                           {row.predictionCount}
