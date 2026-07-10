@@ -18,6 +18,8 @@ const INTEREST_OPTIONS = ["Digital Marketing", "Coding", "Cybersecurity", "Data 
 
 const LEARNING_MODES = ["Online", "Offline", "Hybrid"];
 
+const EXPECTED_SALARY_OPTIONS = ["Upto 25000", "25000 to 50000", "Above 50000"];
+
 export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirect?: string }) {
   const router = useRouter();
   const { setUser } = useAuth();
@@ -106,7 +108,7 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
           <div>
-            <label htmlFor="college" className={labelClass}>College/Work</label>
+            <label htmlFor="college" className={labelClass}>College/Work (Optional)</label>
             <input
               id="college"
               type="text"
@@ -114,7 +116,6 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
               onChange={(e) => update("college", e.target.value)}
               placeholder="Institution name"
               className={inputClass}
-              required
             />
           </div>
           <div>
@@ -176,16 +177,25 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
           <div>
-            <label htmlFor="expectedSalary" className={labelClass}>Expected Salary</label>
-            <input
-              id="expectedSalary"
-              type="text"
-              value={form.expectedSalary}
-              onChange={(e) => update("expectedSalary", e.target.value)}
-              placeholder="e.g. 3-5 LPA"
-              className={inputClass}
-              required
-            />
+            <label htmlFor="expectedSalary" className={labelClass}>Expected Salary (Optional)</label>
+            <div className="relative">
+              <select
+                id="expectedSalary"
+                value={form.expectedSalary}
+                onChange={(e) => update("expectedSalary", e.target.value)}
+                className={`${inputClass} appearance-none pr-10`}
+              >
+                <option value="">Select Salary Range</option>
+                {EXPECTED_SALARY_OPTIONS.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">
+                ▼
+              </span>
+            </div>
           </div>
           <div>
             <label htmlFor="learningMode" className={labelClass}>Preferred Learning Mode</label>

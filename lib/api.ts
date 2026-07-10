@@ -50,11 +50,11 @@ export interface RegisterData {
   fullName: string;
   phone: string;
   email: string;
-  college: string;
+  college?: string;
   district: string;
   currentJob: string;
   interestedIn: string;
-  expectedSalary: string;
+  expectedSalary?: string;
   learningMode: string;
 }
 
