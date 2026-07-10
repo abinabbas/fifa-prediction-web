@@ -32,7 +32,7 @@ const QUARTER_FINALS = [
     match: "04",
     home: { iso: "ar", name: "ARGENTINA" },
     away: { iso: "ch", name: "SWITZERLAND" },
-    date: "12 JULY 2026 6:30 PM",
+    date: "12 JULY 2026 6:30 AM",
     venue: "New York Stadium",
   },
 ];
