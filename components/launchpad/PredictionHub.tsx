@@ -130,7 +130,7 @@ function QuestionCard({ question, serverTime, prediction, onSubmitted, showPlaye
   };
 
   const card = (
-    <div className="relative w-full max-w-lg rounded-[1.35rem] border border-slate-200 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+    <div className="relative w-full max-w-lg rounded-[1.35rem] bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
       <div className="px-6 pb-6 pt-7 sm:px-8 sm:pb-7 sm:pt-8">
         <div className="mb-6 flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#f97316] text-white">
@@ -144,7 +144,7 @@ function QuestionCard({ question, serverTime, prediction, onSubmitted, showPlaye
 
         <div className="mt-6">
           {hasPrediction ? (
-            <div className="rounded-2xl border border-[#1a2b4b]/10 bg-[#1a2b4b]/5 p-5 text-center">
+            <div className="rounded-2xl bg-[#1a2b4b]/5 p-5 text-center">
               <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Your prediction (locked)</p>
               <p className="mt-2 text-lg font-bold text-[#1a2b4b]">
                 {question.options.find((option) => option.id === prediction?.selectedOptionId)?.label}
@@ -154,13 +154,13 @@ function QuestionCard({ question, serverTime, prediction, onSubmitted, showPlaye
               </p>
             </div>
           ) : isClosed ? (
-            <div className="rounded-2xl border border-red-100 bg-red-50 px-4 py-6 text-center">
+            <div className="rounded-2xl bg-red-50 px-4 py-6 text-center">
               <p className="text-sm font-semibold text-red-500">Predictions are closed for this question.</p>
               <p className="mt-2 text-xs text-slate-500">Closed at {closeTimeLabel}</p>
             </div>
           ) : hasMatchLayout ? (
             <>
-              <div className="rounded-2xl border border-slate-200 bg-white px-4 py-5 sm:px-6 sm:py-6">
+              <div className="rounded-2xl bg-slate-50 px-4 py-5 sm:px-6 sm:py-6">
                 <div className="flex items-center justify-between gap-4 sm:gap-6">
                   <TeamPick
                     option={homeTeam}

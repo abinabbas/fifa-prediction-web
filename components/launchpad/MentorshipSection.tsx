@@ -214,8 +214,8 @@ export function MentorshipSection() {
 
         {/* Stats bar */}
         <div
-          className="mt-6 rounded-2xl shadow-sm px-4 py-7 sm:py-8"
-          style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0" }}
+          className="mt-6 rounded-2xl px-4 py-7 shadow-[0_18px_50px_rgba(15,23,42,0.08)] sm:py-8"
+          style={{ backgroundColor: "#ffffff" }}
         >
           <div className="grid grid-cols-3 gap-4 sm:gap-6 text-center divide-x divide-slate-200">
             {stats.map((s) => (
