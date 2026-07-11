@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Clock, Trophy } from "lucide-react";
 import { api, ApiError, type Question, type QuestionOption, type User } from "@/lib/api";
+import { useAuth } from "@/hooks/useAuth";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { getFlagImageUrl, getTeamFlagByIso } from "@/lib/teamFlags";
 
@@ -93,10 +94,13 @@ function QuestionCard({
   showPlayer,
   user,
 }: QuestionCardProps) {
+  const { setUser } = useAuth();
   const [selectedOption, setSelectedOption] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
+  const [loginPhone, setLoginPhone] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
   const [error, setError] = useState("");
   const [expired, setExpired] = useState(new Date(serverTime) >= new Date(question.closesAt));
 
@@ -122,28 +126,46 @@ function QuestionCard({
     hour12: true,
   });
 
-  const handleSubmit = async () => {
-    if (!selectedOption) return;
+  const submitPrediction = async (optionId: string) => {
     setSubmitting(true);
     setError("");
     try {
-      await api.submitPrediction(question.id, selectedOption);
-      setShowConfirm(false);
+      await api.submitPrediction(question.id, optionId);
+      setShowAuthPrompt(false);
       onSubmitted();
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Failed to submit prediction");
-      setShowConfirm(false);
     } finally {
       setSubmitting(false);
     }
   };
 
   const handlePredictClick = () => {
+    if (!selectedOption) return;
     if (!user) {
+      setLoginError("");
       setShowAuthPrompt(true);
       return;
     }
-    setShowConfirm(true);
+    void submitPrediction(selectedOption);
+  };
+
+  const handleLoginSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedOption) return;
+    setLoginError("");
+    setLoginLoading(true);
+    try {
+      const res = await api.login(loginPhone);
+      setUser(res.user);
+      await api.submitPrediction(question.id, selectedOption);
+      setShowAuthPrompt(false);
+      onSubmitted();
+    } catch (err) {
+      setLoginError(err instanceof ApiError ? err.message : "Login failed");
+    } finally {
+      setLoginLoading(false);
+    }
   };
 
   const card = (
@@ -253,14 +275,20 @@ function QuestionCard({
                 </div>
               )}
 
-              <button
-                type="button"
-                onClick={handlePredictClick}
-                disabled={!selectedOption}
-                className="mt-6 w-full rounded-xl bg-[#f97316] py-4 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#ea580c] disabled:opacity-50"
-              >
-                Confirm Prediction
-              </button>
+              {selectedOption ? (
+                <button
+                  type="button"
+                  onClick={handlePredictClick}
+                  disabled={submitting}
+                  className="mt-6 w-full rounded-xl bg-[#f97316] py-4 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#ea580c] disabled:opacity-50"
+                >
+                  {submitting ? "Submitting..." : "Confirm Prediction"}
+                </button>
+              ) : (
+                <p className="mt-6 text-center text-sm font-semibold text-slate-500">
+                  Select your team to predict
+                </p>
+              )}
             </>
           )}
         </div>
@@ -307,62 +335,71 @@ function QuestionCard({
         {showPlayer && <div className="hidden min-w-0 lg:block" aria-hidden="true" />}
       </div>
 
-      {showConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1a2b4b]/50 p-4">
-          <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-xl">
-            <h3 className="mb-2 text-lg font-bold text-[#1a2b4b]">Confirm prediction</h3>
-            <p className="mb-2 text-sm text-slate-500">{question.title}</p>
-            <p className="mb-6 break-words text-sm text-slate-500">
-              You selected{" "}
-              <strong className="text-[#1a2b4b]">
-                {question.options.find((option) => option.id === selectedOption)?.label}
-              </strong>
-              . This cannot be changed.
-            </p>
-            <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={() => setShowConfirm(false)}
-                className="flex-1 rounded-lg border border-slate-200 py-3 text-sm font-semibold text-[#1a2b4b] hover:bg-slate-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleSubmit}
-                disabled={submitting}
-                className="flex-1 rounded-lg bg-[#f97316] py-3 text-sm font-semibold text-white hover:bg-[#ea580c] disabled:opacity-50"
-              >
-                {submitting ? "Submitting..." : "Confirm"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {showAuthPrompt && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1a2b4b]/50 p-4">
-          <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-xl">
-            <h3 className="mb-2 text-lg font-bold text-[#1a2b4b]">Register or login to predict</h3>
-            <p className="mb-6 text-sm text-slate-500">
-              Create a free account or log in to submit your prediction and compete for the prize.
+          <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-xl">
+            <h3 className="mb-2 text-center text-lg font-bold text-[#1a2b4b]">
+              Login to confirm prediction
+            </h3>
+            <p className="mb-5 text-center text-sm text-slate-500">
+              Enter your registered mobile number to submit your pick
+              {selectedOption
+                ? ` for ${question.options.find((option) => option.id === selectedOption)?.label}`
+                : ""}
+              .
             </p>
-            <Link
-              href="/register"
-              className="inline-block w-full rounded-xl bg-[#f97316] px-8 py-3.5 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#ea580c]"
-            >
-              Register Now
-            </Link>
-            <p className="mt-4 text-sm text-slate-600">
-              Already registered?{" "}
-              <Link href="/login" className="font-semibold text-[#f97316] hover:underline">
-                Login here
+
+            <form onSubmit={handleLoginSubmit}>
+              <label
+                htmlFor={`predict-login-phone-${question.id}`}
+                className="mb-2 block text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500"
+              >
+                Registered Mobile
+              </label>
+              <input
+                id={`predict-login-phone-${question.id}`}
+                type="tel"
+                value={loginPhone}
+                onChange={(e) => setLoginPhone(e.target.value)}
+                placeholder="Verification number"
+                className="mb-4 block w-full rounded-xl border border-transparent bg-[#f1f5f9] px-4 py-3.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-[#f97316] focus:outline-none focus:ring-2 focus:ring-[#f97316]/20"
+                required
+              />
+
+              {loginError && (
+                <div className="mb-4 rounded-lg border border-red-100 bg-red-50 p-3 text-sm text-red-600">
+                  {loginError}
+                  {loginError.toLowerCase().includes("not registered") && (
+                    <>
+                      {" "}
+                      <Link href="/register" className="font-semibold underline">
+                        Register
+                      </Link>
+                    </>
+                  )}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loginLoading}
+                className="w-full rounded-xl bg-[#f97316] py-3.5 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#ea580c] disabled:opacity-50"
+              >
+                {loginLoading ? "Logging in..." : "Login & Confirm"}
+              </button>
+            </form>
+
+            <p className="mt-4 text-center text-sm text-slate-600">
+              New here?{" "}
+              <Link href="/register" className="font-semibold text-[#f97316] hover:underline">
+                Register
               </Link>
             </p>
+
             <button
               type="button"
               onClick={() => setShowAuthPrompt(false)}
-              className="mt-5 text-sm font-semibold text-slate-500 hover:text-[#1a2b4b]"
+              className="mt-4 w-full text-sm font-semibold text-slate-500 hover:text-[#1a2b4b]"
             >
               Close
             </button>
