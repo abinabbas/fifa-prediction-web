@@ -64,8 +64,10 @@ function TeamPick({
       type="button"
       onClick={onSelect}
       disabled={disabled}
-      className={`flex flex-1 flex-col items-center gap-3 rounded-xl px-3 py-4 transition-all disabled:cursor-default sm:px-4 sm:py-5 ${
-        selected ? "bg-orange-50 ring-2 ring-[#f97316]" : "hover:bg-slate-50"
+      className={`flex flex-1 flex-col items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-5 transition-all disabled:cursor-default sm:px-4 sm:py-6 ${
+        selected
+          ? "border-[#f97316] ring-2 ring-[#f97316] shadow-[0_12px_32px_rgba(249,115,22,0.28)]"
+          : "shadow-[0_12px_28px_rgba(15,23,42,0.1)] hover:border-slate-300 hover:shadow-[0_16px_36px_rgba(15,23,42,0.14)]"
       }`}
     >
       <div
@@ -141,7 +143,7 @@ function QuestionCard({
   };
 
   const handlePredictClick = () => {
-    if (!selectedOption) return;
+    if (!selectedOption || submitting) return;
     if (!user) {
       setLoginError("");
       setShowAuthPrompt(true);
@@ -158,15 +160,18 @@ function QuestionCard({
     try {
       const res = await api.login(loginPhone);
       setUser(res.user);
-      await api.submitPrediction(question.id, selectedOption);
       setShowAuthPrompt(false);
-      onSubmitted();
+      setLoginLoading(false);
+      await submitPrediction(selectedOption);
     } catch (err) {
       setLoginError(err instanceof ApiError ? err.message : "Login failed");
-    } finally {
       setLoginLoading(false);
     }
   };
+
+  const lockedOption = question.options.find(
+    (option) => option.id === prediction?.selectedOptionId
+  );
 
   const card = (
     <div className="relative w-full max-w-lg rounded-[1.35rem] bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
@@ -183,10 +188,26 @@ function QuestionCard({
 
         <div className="mt-6">
           {hasPrediction ? (
-            <div className="rounded-2xl bg-[#1a2b4b]/5 p-5 text-center">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Your prediction (locked)</p>
-              <p className="mt-2 text-lg font-bold text-[#1a2b4b]">
-                {question.options.find((option) => option.id === prediction?.selectedOptionId)?.label}
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-[0_12px_28px_rgba(15,23,42,0.08)]">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                Your prediction (locked)
+              </p>
+              {lockedOption?.flagIso ? (
+                <div className="mx-auto mt-4 flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-[0_0_28px_rgba(249,115,22,0.35)]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={getFlagImageUrl(lockedOption.flagIso)}
+                    alt=""
+                    className="h-14 w-14 rounded-full object-cover"
+                  />
+                </div>
+              ) : null}
+              <p className="mt-3 text-lg font-bold text-[#1a2b4b]">
+                {lockedOption
+                  ? lockedOption.flagIso
+                    ? getTeamDisplayName(lockedOption)
+                    : lockedOption.label
+                  : "—"}
               </p>
               <p className="mt-2 text-xs text-slate-400">
                 Submitted {new Date(prediction.createdAt).toLocaleString()}
@@ -199,26 +220,24 @@ function QuestionCard({
             </div>
           ) : hasMatchLayout ? (
             <>
-              <div className="rounded-2xl bg-slate-50 px-4 py-5 sm:px-6 sm:py-6">
-                <div className="flex items-center justify-between gap-4 sm:gap-6">
-                  <TeamPick
-                    option={homeTeam}
-                    glow={TEAM_GLOWS[0]}
-                    selected={activeSelection === homeTeam.id}
-                    disabled={hasPrediction}
-                    onSelect={() => setSelectedOption(homeTeam.id)}
-                  />
-                  <span className="shrink-0 px-2 text-xs font-bold uppercase tracking-wider text-slate-400">
-                    VS
-                  </span>
-                  <TeamPick
-                    option={awayTeam}
-                    glow={TEAM_GLOWS[1]}
-                    selected={activeSelection === awayTeam.id}
-                    disabled={hasPrediction}
-                    onSelect={() => setSelectedOption(awayTeam.id)}
-                  />
-                </div>
+              <div className="flex items-center justify-between gap-3 sm:gap-4">
+                <TeamPick
+                  option={homeTeam}
+                  glow={TEAM_GLOWS[0]}
+                  selected={activeSelection === homeTeam.id}
+                  disabled={hasPrediction}
+                  onSelect={() => setSelectedOption(homeTeam.id)}
+                />
+                <span className="shrink-0 px-1 text-xs font-bold uppercase tracking-wider text-slate-400">
+                  VS
+                </span>
+                <TeamPick
+                  option={awayTeam}
+                  glow={TEAM_GLOWS[1]}
+                  selected={activeSelection === awayTeam.id}
+                  disabled={hasPrediction}
+                  onSelect={() => setSelectedOption(awayTeam.id)}
+                />
               </div>
 
               {neutralOptions.length > 0 && (
@@ -275,20 +294,18 @@ function QuestionCard({
                 </div>
               )}
 
-              {selectedOption ? (
-                <button
-                  type="button"
-                  onClick={handlePredictClick}
-                  disabled={submitting}
-                  className="mt-6 w-full rounded-xl bg-[#f97316] py-4 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#ea580c] disabled:opacity-50"
-                >
-                  {submitting ? "Submitting..." : "Confirm Prediction"}
-                </button>
-              ) : (
-                <p className="mt-6 text-center text-sm font-semibold text-slate-500">
-                  Select your team to predict
-                </p>
-              )}
+              <button
+                type="button"
+                onClick={handlePredictClick}
+                disabled={!selectedOption || submitting}
+                className="mt-6 w-full rounded-xl bg-[#f97316] py-4 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#ea580c] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {submitting
+                  ? "Submitting..."
+                  : selectedOption
+                    ? "Confirm Prediction"
+                    : "Select your team to predict"}
+              </button>
             </>
           )}
         </div>
