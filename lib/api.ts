@@ -160,6 +160,51 @@ export interface MarqueeTeam {
   label: string;
 }
 
+export interface FootballFixture {
+  id: number;
+  date: string;
+  status: string;
+  period: string | null;
+  minute: number | null;
+  round: string;
+  home: { name: string; score: number | null; coach: string | null };
+  away: { name: string; score: number | null; coach: string | null };
+  venue: { name: string | null; city: string | null; country: string | null } | null;
+}
+
+export interface FootballFixturesResponse {
+  leagueId: number;
+  leagueName: string;
+  rounds: string[];
+  fixtures: FootballFixture[];
+  serverTime: string;
+}
+
+export interface FootballLineupPlayer {
+  id: number;
+  name: string;
+  shortName: string;
+  position: string | null;
+  number: number | null;
+}
+
+export interface FootballLineupSide {
+  teamId: number;
+  teamName: string;
+  formation: string | null;
+  confidence: number | null;
+  players: FootballLineupPlayer[];
+  substitutes: FootballLineupPlayer[];
+}
+
+export interface FootballLineupsResponse {
+  eventId: number;
+  lineupStatus: "unavailable" | "predicted" | "confirmed";
+  predicted: boolean;
+  lineups: FootballLineupSide[];
+  serverTime: string;
+}
+
 export const api = {
   register: (data: RegisterData) =>
     request<{ user: User }>("/api/auth/register", {
@@ -250,4 +295,10 @@ export const api = {
 
   deleteQuestion: (id: string) =>
     request<{ message: string }>(`/api/admin/questions/${id}`, { method: "DELETE" }),
+
+  getFootballFixtures: () =>
+    request<FootballFixturesResponse>("/api/football/fixtures"),
+
+  getFootballLineups: (eventId: number) =>
+    request<FootballLineupsResponse>(`/api/football/lineups/${eventId}`),
 };

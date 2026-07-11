@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Sparkles, Trophy, Users } from "lucide-react";
 import { api, type User } from "@/lib/api";
 import { PageContainer } from "@/components/launchpad/PageContainer";
-import { WorldCupFixturesWidget } from "@/components/launchpad/WorldCupFixturesWidget";
 
 function formatParticipants(count: number | null | undefined): string {
   if (count == null) return "10K+";
@@ -102,7 +101,6 @@ export function LeaderboardSection({ user }: { user: User | null }) {
           </div>
         </div>
 
-        <WorldCupFixturesWidget />
       </PageContainer>
     </section>
   );

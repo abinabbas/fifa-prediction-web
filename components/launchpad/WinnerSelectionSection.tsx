@@ -1,4 +1,5 @@
 import { PageContainer } from "@/components/launchpad/PageContainer";
+import { WorldCupFixturesWidget } from "@/components/launchpad/WorldCupFixturesWidget";
 
 const terms = [
   "Only one prediction per participant is allowed for each match.",
@@ -10,7 +11,7 @@ const terms = [
 
 export function WinnerSelectionSection() {
   return (
-    <section className="bg-white pt-8 pb-0 sm:pt-12">
+    <section className="bg-white pt-8 pb-10 sm:pt-12 sm:pb-14">
       <PageContainer>
         <div className="max-w-3xl">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-6">
@@ -44,6 +45,10 @@ export function WinnerSelectionSection() {
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
             Predict. Compete. Win. Kickstart Your Career with Datameris Launchpad.
           </p>
+        </div>
+
+        <div className="mt-12 border-t border-slate-100 pt-10 sm:mt-14 sm:pt-12">
+          <WorldCupFixturesWidget />
         </div>
       </PageContainer>
     </section>

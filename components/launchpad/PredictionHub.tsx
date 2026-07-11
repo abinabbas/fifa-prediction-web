@@ -22,6 +22,7 @@ interface QuestionCardProps {
   prediction: { selectedOptionId: string; createdAt: string } | null;
   onSubmitted: () => void;
   showPlayer?: boolean;
+  user: User | null;
 }
 
 function getTeamDisplayName(option: QuestionOption): string {
@@ -84,10 +85,18 @@ function TeamPick({
   );
 }
 
-function QuestionCard({ question, serverTime, prediction, onSubmitted, showPlayer }: QuestionCardProps) {
+function QuestionCard({
+  question,
+  serverTime,
+  prediction,
+  onSubmitted,
+  showPlayer,
+  user,
+}: QuestionCardProps) {
   const [selectedOption, setSelectedOption] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const [error, setError] = useState("");
   const [expired, setExpired] = useState(new Date(serverTime) >= new Date(question.closesAt));
 
@@ -127,6 +136,14 @@ function QuestionCard({ question, serverTime, prediction, onSubmitted, showPlaye
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handlePredictClick = () => {
+    if (!user) {
+      setShowAuthPrompt(true);
+      return;
+    }
+    setShowConfirm(true);
   };
 
   const card = (
@@ -238,7 +255,7 @@ function QuestionCard({ question, serverTime, prediction, onSubmitted, showPlaye
 
               <button
                 type="button"
-                onClick={() => setShowConfirm(true)}
+                onClick={handlePredictClick}
                 disabled={!selectedOption}
                 className="mt-6 w-full rounded-xl bg-[#f97316] py-4 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#ea580c] disabled:opacity-50"
               >
@@ -322,6 +339,36 @@ function QuestionCard({ question, serverTime, prediction, onSubmitted, showPlaye
           </div>
         </div>
       )}
+
+      {showAuthPrompt && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1a2b4b]/50 p-4">
+          <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-xl">
+            <h3 className="mb-2 text-lg font-bold text-[#1a2b4b]">Register or login to predict</h3>
+            <p className="mb-6 text-sm text-slate-500">
+              Create a free account or log in to submit your prediction and compete for the prize.
+            </p>
+            <Link
+              href="/register"
+              className="inline-block w-full rounded-xl bg-[#f97316] px-8 py-3.5 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#ea580c]"
+            >
+              Register Now
+            </Link>
+            <p className="mt-4 text-sm text-slate-600">
+              Already registered?{" "}
+              <Link href="/login" className="font-semibold text-[#f97316] hover:underline">
+                Login here
+              </Link>
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowAuthPrompt(false)}
+              className="mt-5 text-sm font-semibold text-slate-500 hover:text-[#1a2b4b]"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
@@ -398,41 +445,12 @@ function PredictionLayout({
             prediction={predictions[question.id] ?? null}
             onSubmitted={onSubmitted}
             showPlayer={questions.length === 1 && index === 0}
+            user={user}
           />
         ))}
       </div>
     </>
   );
-
-  if (!user && questions.length > 0) {
-    return (
-      <div className="relative z-10">
-        <div className="pointer-events-none select-none opacity-60 blur-[5px]" aria-hidden="true">
-          {content}
-        </div>
-        <div className="absolute inset-0 flex items-center justify-center px-4">
-          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white/95 p-8 text-center shadow-xl backdrop-blur-sm">
-            <h3 className="mb-2 text-lg font-bold text-[#1a2b4b]">Register for prediction</h3>
-            <p className="mb-6 text-sm text-slate-500">
-              Create your free account to submit predictions and compete for the prize.
-            </p>
-            <Link
-              href="/register"
-              className="inline-block w-full rounded-xl bg-[#f97316] px-8 py-3.5 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#ea580c] sm:w-auto"
-            >
-              Register Now
-            </Link>
-            <p className="mt-4 text-sm text-slate-600">
-              Already registered?{" "}
-              <Link href="/login" className="font-semibold text-[#f97316] hover:underline">
-                Login here
-              </Link>
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return content;
 }

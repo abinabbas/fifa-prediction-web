@@ -44,6 +44,15 @@ export function getTeamFlagByIso(iso: string): TeamFlag | undefined {
   return TEAM_FLAGS.find((team) => team.iso === iso);
 }
 
+export function getTeamFlagByName(name: string): TeamFlag | undefined {
+  const normalized = name.trim().toLowerCase();
+  return TEAM_FLAGS.find(
+    (team) =>
+      team.name.toLowerCase() === normalized ||
+      team.code.toLowerCase() === normalized
+  );
+}
+
 export function getFlagImageUrl(iso: string): string {
   return `https://flagcdn.com/w40/${iso}.png`;
 }
