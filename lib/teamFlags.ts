@@ -24,6 +24,7 @@ export const TEAM_FLAGS: TeamFlag[] = [
   { code: "ENG", iso: "gb-eng", name: "England" },
   { code: "USA", iso: "us", name: "United States" },
   { code: "NED", iso: "nl", name: "Netherlands" },
+  { code: "NOR", iso: "no", name: "Norway" },
   { code: "ITA", iso: "it", name: "Italy" },
   { code: "BEL", iso: "be", name: "Belgium" },
   { code: "CRO", iso: "hr", name: "Croatia" },
