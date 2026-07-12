@@ -39,8 +39,8 @@ export function HomeContent() {
 
       <HeroSection />
       <StepsSection />
-      <MentorshipSection />
       <PredictionHub user={loading ? null : user} />
+      <MentorshipSection />
       <LeaderboardSection user={loading ? null : user} />
       <WinnerSelectionSection />
       <ExperienceSection />

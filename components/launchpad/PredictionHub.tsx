@@ -548,11 +548,14 @@ export function PredictionHub({ user }: PredictionHubProps) {
       <div className="prediction-hub-grid" aria-hidden="true" />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-        <p className="relative z-10 mb-2 text-center text-[10px] font-bold uppercase tracking-wider text-[#f97316]">
-          Prediction Hub
-        </p>
-        <h2 className="relative z-10 mb-8 text-center text-2xl font-extrabold uppercase text-slate-900 sm:mb-10 sm:text-3xl">
-          Open Predictions
+        <h2 className="relative z-10 mb-8 text-center text-xl font-extrabold leading-snug sm:mb-10 sm:text-2xl md:text-3xl">
+          <span className="block text-[#1a2b4b]">
+            ഡിജിറ്റൽ മാർക്കറ്റിംഗിൽ{" "}
+            <span className="text-[#f97316]">G.O.A.T</span> ആവാം
+          </span>
+          <span className="mt-1 block text-[#1a2b4b]">
+            അതും <span className="text-[#f97316]">FREE</span> ആയി
+          </span>
         </h2>
 
         <PredictionLayout
@@ -563,6 +566,15 @@ export function PredictionHub({ user }: PredictionHubProps) {
           user={user}
           fetching={fetching}
         />
+
+        <div className="relative z-10 mx-auto mt-10 max-w-3xl sm:mt-12">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://res.cloudinary.com/delrmm6pq/image/upload/v1783842611/WhatsApp_Image_2026-07-12_at_13.02.17_xigdd7.jpg"
+            alt="Predict & Win — AI-Integrated Digital Marketing Mentorship Program"
+            className="w-full rounded-2xl object-cover shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
+          />
+        </div>
       </div>
     </section>
   );

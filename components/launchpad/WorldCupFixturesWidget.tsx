@@ -21,9 +21,18 @@ function formatMatchDate(iso: string) {
 }
 
 function statusLabel(fixture: FootballFixture) {
-  if (fixture.status === "finished") return "Full time";
+  if (fixture.status === "finished") {
+    if (fixture.period?.toLowerCase().includes("aet") || fixture.period?.toLowerCase().includes("et")) {
+      return "Full time (AET)";
+    }
+    return "Full time";
+  }
   if (fixture.status === "inprogress") {
-    return fixture.minute != null ? `Live · ${fixture.minute}'` : "Live";
+    const clock = fixture.minute != null ? `${fixture.minute}'` : null;
+    if (fixture.period) {
+      return clock ? `Live · ${fixture.period} · ${clock}` : `Live · ${fixture.period}`;
+    }
+    return clock ? `Live · ${clock}` : "Live";
   }
   if (fixture.status === "notstarted") return "Upcoming";
   return fixture.status;
@@ -35,14 +44,15 @@ function scoreText(fixture: FootballFixture) {
   return `${fixture.home.score} – ${fixture.away.score}`;
 }
 
-function TeamBadge({ name }: { name: string }) {
+function TeamBadge({ name, logo }: { name: string; logo?: string | null }) {
   const flag = getTeamFlagByName(name);
+  const imageSrc = flag ? getFlagImageUrl(flag.iso) : logo || null;
   return (
     <div className="flex flex-col items-center gap-2 text-center">
-      {flag ? (
+      {imageSrc ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={getFlagImageUrl(flag.iso)}
+          src={imageSrc}
           alt=""
           className="h-10 w-10 rounded-full object-cover shadow-[0_0_0_3px_rgba(255,255,255,1),0_8px_20px_rgba(15,23,42,0.12)] sm:h-12 sm:w-12"
         />
@@ -116,7 +126,7 @@ function FixtureCard({
         </div>
 
         <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-          <TeamBadge name={fixture.home.name} />
+          <TeamBadge name={fixture.home.name} logo={fixture.home.logo} />
           <div className="min-w-[4.5rem] text-center">
             <div
               className={`text-lg font-extrabold tabular-nums sm:text-xl ${
@@ -127,7 +137,7 @@ function FixtureCard({
             </div>
             <div className="mt-1 text-[11px] text-slate-500">{formatMatchDate(fixture.date)}</div>
           </div>
-          <TeamBadge name={fixture.away.name} />
+          <TeamBadge name={fixture.away.name} logo={fixture.away.logo} />
         </div>
 
         {(fixture.venue?.name || fixture.venue?.city) && (
@@ -162,11 +172,6 @@ function FixtureCard({
           )}
           {!loading && !error && lineups && lineups.length > 0 && (
             <>
-              {lineupStatus === "predicted" && (
-                <p className="mb-4 text-center text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">
-                  Predicted lineup · official ~1h before kick-off
-                </p>
-              )}
               {lineupStatus === "confirmed" && (
                 <p className="mb-4 text-center text-[11px] font-semibold uppercase tracking-[0.12em] text-[#f97316]">
                   Official lineup

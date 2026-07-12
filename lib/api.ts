@@ -167,8 +167,8 @@ export interface FootballFixture {
   period: string | null;
   minute: number | null;
   round: string;
-  home: { name: string; score: number | null; coach: string | null };
-  away: { name: string; score: number | null; coach: string | null };
+  home: { name: string; score: number | null; coach: string | null; logo?: string | null };
+  away: { name: string; score: number | null; coach: string | null; logo?: string | null };
   venue: { name: string | null; city: string | null; country: string | null } | null;
 }
 
