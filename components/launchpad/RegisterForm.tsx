@@ -3,9 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { api, ApiError } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
-import { StadiumIcon } from "@/components/launchpad/LoginIcons";
+import { LaunchpadLogo } from "@/components/launchpad/LaunchpadLogo";
 
 const labelClass =
   "block text-[10px] font-bold uppercase tracking-[0.1em] text-slate-500 mb-1.5";
@@ -50,16 +51,24 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
   };
 
   return (
-    <div className="w-full max-w-2xl bg-[#f4f6f9] rounded-[14px] border border-slate-200 shadow-[0_2px_16px_rgba(15,23,42,0.06)] p-6 sm:p-8">
-      <div className="flex items-center gap-3 mb-8">
-        <div className="w-11 h-11 rounded-xl bg-[#f97316] flex items-center justify-center shrink-0">
-          <StadiumIcon />
-        </div>
-        <h1 className="text-lg font-bold text-[#1a2b4b]">New Registration</h1>
+    <div className="w-full max-w-2xl">
+      <Link
+        href="/home"
+        className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#1a2b4b] transition-colors hover:text-[#f97316]"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back to home
+      </Link>
+
+      <div className="rounded-[14px] border border-slate-200 bg-[#f4f6f9] p-6 shadow-[0_2px_16px_rgba(15,23,42,0.06)] sm:p-8">
+      <div className="mb-6 flex justify-center">
+        <LaunchpadLogo />
       </div>
 
+      <h1 className="mb-8 text-center text-lg font-bold text-[#1a2b4b]">New Registration</h1>
+
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+        <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
           <div>
             <label htmlFor="fullName" className={labelClass}>
               Full Name
@@ -105,7 +114,7 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
+        <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
           <div>
             <label htmlFor="interestedIn" className={labelClass}>
               Interested In
@@ -125,7 +134,7 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
                   </option>
                 ))}
               </select>
-              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-slate-400">
                 ▼
               </span>
             </div>
@@ -149,7 +158,7 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
                   </option>
                 ))}
               </select>
-              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-slate-400">
                 ▼
               </span>
             </div>
@@ -157,12 +166,12 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
         </div>
 
         {error && (
-          <div className="mb-5 p-3 rounded-lg bg-red-50 border border-red-100 text-red-600 text-sm">
+          <div className="mb-5 rounded-lg border border-red-100 bg-red-50 p-3 text-sm text-red-600">
             {error}
             {error.includes("already taken") && (
               <>
                 {" "}
-                <Link href="/login" className="underline font-semibold">
+                <Link href="/login" className="font-semibold underline">
                   Login instead
                 </Link>
               </>
@@ -173,18 +182,19 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold uppercase tracking-wider py-4 rounded-xl disabled:opacity-50 transition-colors"
+          className="w-full rounded-xl bg-[#f97316] py-4 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#ea580c] disabled:opacity-50"
         >
           {loading ? "Submitting..." : "Submit & Start Predicting"}
         </button>
 
         <Link
           href="/login"
-          className="block w-full mt-4 text-center bg-white text-[#1a2b4b] text-[11px] font-bold uppercase tracking-wide py-3.5 rounded-lg border-[1.5px] border-[#1a2b4b] hover:bg-slate-50 transition-colors"
+          className="mt-4 block w-full rounded-lg border-[1.5px] border-[#1a2b4b] bg-white py-3.5 text-center text-[11px] font-bold uppercase tracking-wide text-[#1a2b4b] transition-colors hover:bg-slate-50"
         >
           Already Participated? Submit Prediction
         </Link>
       </form>
+      </div>
     </div>
   );
 }
