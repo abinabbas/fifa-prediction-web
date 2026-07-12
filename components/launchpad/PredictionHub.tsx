@@ -548,7 +548,7 @@ export function PredictionHub({ user }: PredictionHubProps) {
       <div className="prediction-hub-grid" aria-hidden="true" />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-        <h2 className="relative z-10 mb-8 text-center text-xl font-extrabold leading-snug sm:mb-10 sm:text-2xl md:text-3xl">
+        <h2 className="malayalam-heading relative z-10 mb-8 text-center text-xl font-extrabold leading-snug sm:mb-10 sm:text-2xl md:text-3xl">
           <span className="block text-[#1a2b4b]">
             ഡിജിറ്റൽ മാർക്കറ്റിംഗിൽ{" "}
             <span className="text-[#f97316]">G.O.A.T</span> ആവാം

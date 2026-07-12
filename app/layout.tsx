@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Barlow_Condensed, Inter } from "next/font/google";
+import { Barlow_Condensed, Inter, Noto_Sans_Malayalam } from "next/font/google";
 import { Providers } from "@/components/Providers";
 import { BRAND_APPLE_ICON_SRC, BRAND_FAVICON_SRC } from "@/lib/brand";
 import "./globals.css";
@@ -15,6 +15,12 @@ const barlowCondensed = Barlow_Condensed({
   subsets: ["latin"],
   weight: ["800"],
   style: ["italic"],
+});
+
+const notoMalayalam = Noto_Sans_Malayalam({
+  variable: "--font-malayalam",
+  subsets: ["malayalam"],
+  weight: ["600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -35,7 +41,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${barlowCondensed.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${barlowCondensed.variable} ${notoMalayalam.variable} h-full antialiased`}
+    >
       <Script id="google-tag-manager" strategy="beforeInteractive">
         {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

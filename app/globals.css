@@ -24,12 +24,19 @@
   --color-border: var(--border);
   --font-sans: var(--font-inter);
   --font-family-hero: var(--font-hero), "Arial Narrow", sans-serif;
+  --font-family-malayalam: var(--font-malayalam), "Noto Sans Malayalam", sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   overflow-x: clip;
+}
+
+.malayalam-heading {
+  font-family: var(--font-family-malayalam);
+  font-weight: 800;
+  letter-spacing: 0.01em;
 }
 
 html {
