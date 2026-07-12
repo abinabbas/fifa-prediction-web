@@ -567,13 +567,32 @@ export function PredictionHub({ user }: PredictionHubProps) {
           fetching={fetching}
         />
 
-        <div className="relative z-10 mx-auto mt-10 max-w-3xl sm:mt-12">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://res.cloudinary.com/delrmm6pq/image/upload/v1783842611/WhatsApp_Image_2026-07-12_at_13.02.17_xigdd7.jpg"
-            alt="Predict & Win — AI-Integrated Digital Marketing Mentorship Program"
-            className="w-full rounded-2xl object-cover shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
+        <div className="relative z-10 mx-auto mt-10 grid max-w-5xl grid-cols-1 items-stretch gap-6 sm:mt-12 sm:grid-cols-[1fr_auto_1fr] sm:gap-8">
+          <div className="mx-auto w-full max-w-sm overflow-hidden rounded-2xl bg-[#1a2b4b] shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
+            <div className="relative aspect-[9/16] w-full">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/mJEOC6-zi4k?rel=0"
+                title="Datameris Launchpad Predict & Win"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="absolute inset-0 h-full w-full border-0"
+              />
+            </div>
+          </div>
+
+          <div
+            className="mx-auto h-px w-16 bg-slate-300 sm:mx-0 sm:h-auto sm:w-px sm:self-stretch"
+            aria-hidden="true"
           />
+
+          <div className="mx-auto w-full max-w-sm overflow-hidden rounded-2xl shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://res.cloudinary.com/delrmm6pq/image/upload/v1783842611/WhatsApp_Image_2026-07-12_at_13.02.17_xigdd7.jpg"
+              alt="Predict & Win — AI-Integrated Digital Marketing Mentorship Program"
+              className="h-full w-full object-cover"
+            />
+          </div>
         </div>
       </div>
     </section>

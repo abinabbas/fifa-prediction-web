@@ -50,12 +50,8 @@ export interface RegisterData {
   fullName: string;
   phone: string;
   email: string;
-  college?: string;
-  district: string;
-  currentJob: string;
   interestedIn: string;
-  expectedSalary?: string;
-  learningMode: string;
+  expectedSalary: string;
 }
 
 export interface QuestionOption {

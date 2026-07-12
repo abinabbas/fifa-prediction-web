@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { api, ApiError } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
-import { KERALA_DISTRICTS } from "@/lib/constants";
 import { StadiumIcon } from "@/components/launchpad/LoginIcons";
 
 const labelClass =
@@ -16,8 +15,6 @@ const inputClass =
 
 const INTEREST_OPTIONS = ["Digital Marketing", "Coding", "Cybersecurity", "Data Science", "Other"];
 
-const LEARNING_MODES = ["Online", "Offline", "Hybrid"];
-
 const EXPECTED_SALARY_OPTIONS = ["Upto 25000", "25000 to 50000", "Above 50000"];
 
 export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirect?: string }) {
@@ -27,12 +24,8 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
     fullName: "",
     phone: "",
     email: "",
-    college: "",
-    district: "",
-    currentJob: "",
     interestedIn: "",
     expectedSalary: "",
-    learningMode: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -68,7 +61,9 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
           <div>
-            <label htmlFor="fullName" className={labelClass}>Full Name</label>
+            <label htmlFor="fullName" className={labelClass}>
+              Full Name
+            </label>
             <input
               id="fullName"
               type="text"
@@ -80,7 +75,9 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
             />
           </div>
           <div>
-            <label htmlFor="phone" className={labelClass}>Mobile Number</label>
+            <label htmlFor="phone" className={labelClass}>
+              Mobile Number
+            </label>
             <input
               id="phone"
               type="tel"
@@ -94,67 +91,25 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
         </div>
 
         <div className="mb-5">
-          <label htmlFor="email" className={labelClass}>Email Address</label>
+          <label htmlFor="email" className={labelClass}>
+            Email Address
+          </label>
           <input
             id="email"
             type="email"
             value={form.email}
             onChange={(e) => update("email", e.target.value)}
-            placeholder="yourname@college.edu"
+            placeholder="yourname@email.com"
             className={inputClass}
             required
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
           <div>
-            <label htmlFor="college" className={labelClass}>College/Work (Optional)</label>
-            <input
-              id="college"
-              type="text"
-              value={form.college}
-              onChange={(e) => update("college", e.target.value)}
-              placeholder="Institution name"
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="district" className={labelClass}>District</label>
-            <div className="relative">
-              <select
-                id="district"
-                value={form.district}
-                onChange={(e) => update("district", e.target.value)}
-                className={`${inputClass} appearance-none pr-10`}
-                required
-              >
-                <option value="">Select District</option>
-                {KERALA_DISTRICTS.map((d) => (
-                  <option key={d} value={d}>{d}</option>
-                ))}
-              </select>
-              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">
-                ▼
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
-          <div>
-            <label htmlFor="currentJob" className={labelClass}>Current Job</label>
-            <input
-              id="currentJob"
-              type="text"
-              value={form.currentJob}
-              onChange={(e) => update("currentJob", e.target.value)}
-              placeholder="e.g. Student / Job title"
-              className={inputClass}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="interestedIn" className={labelClass}>Interested In</label>
+            <label htmlFor="interestedIn" className={labelClass}>
+              Interested In
+            </label>
             <div className="relative">
               <select
                 id="interestedIn"
@@ -165,30 +120,8 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
               >
                 <option value="">Select Interest</option>
                 {INTEREST_OPTIONS.map((opt) => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))}
-              </select>
-              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">
-                ▼
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
-          <div>
-            <label htmlFor="expectedSalary" className={labelClass}>Expected Salary (Optional)</label>
-            <div className="relative">
-              <select
-                id="expectedSalary"
-                value={form.expectedSalary}
-                onChange={(e) => update("expectedSalary", e.target.value)}
-                className={`${inputClass} appearance-none pr-10`}
-              >
-                <option value="">Select Salary Range</option>
-                {EXPECTED_SALARY_OPTIONS.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
+                  <option key={opt} value={opt}>
+                    {opt}
                   </option>
                 ))}
               </select>
@@ -198,18 +131,22 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
             </div>
           </div>
           <div>
-            <label htmlFor="learningMode" className={labelClass}>Preferred Learning Mode</label>
+            <label htmlFor="expectedSalary" className={labelClass}>
+              Expected Salary
+            </label>
             <div className="relative">
               <select
-                id="learningMode"
-                value={form.learningMode}
-                onChange={(e) => update("learningMode", e.target.value)}
+                id="expectedSalary"
+                value={form.expectedSalary}
+                onChange={(e) => update("expectedSalary", e.target.value)}
                 className={`${inputClass} appearance-none pr-10`}
                 required
               >
-                <option value="">Select Mode</option>
-                {LEARNING_MODES.map((mode) => (
-                  <option key={mode} value={mode}>{mode}</option>
+                <option value="">Select Salary Range</option>
+                {EXPECTED_SALARY_OPTIONS.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
                 ))}
               </select>
               <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">
