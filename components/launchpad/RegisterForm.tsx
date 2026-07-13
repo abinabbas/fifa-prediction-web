@@ -3,11 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { User, Phone, Mail, Target, Wallet, ChevronDown, Loader2 } from "lucide-react";
 import { api, ApiError } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 
 const labelClass =
-  "block text-[10px] font-bold uppercase tracking-[0.12em] text-[#1a2b4b] mb-1.5";
+  "flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[#1a2b4b] mb-1.5";
 
 const inputClass =
   "block w-full px-3.5 py-[11px] border border-[#dde3ec] rounded-lg bg-white text-sm text-slate-800 placeholder:text-[#b0bac8] focus:outline-none focus:border-[#f97316] focus:ring-2 focus:ring-[#f97316]/15 transition-all";
@@ -22,7 +23,6 @@ export function RegisterForm({
 }: {
   onSuccessRedirect?: string;
   submitLabel?: string;
-  /** Called when the user wants to switch to the login tab (used in tab context) */
   onSwitchTab?: () => void;
 }) {
   const router = useRouter();
@@ -57,11 +57,13 @@ export function RegisterForm({
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* Row 1 */}
+
+      {/* Row 1 — Full Name & Mobile */}
       <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="reg-fullName" className={labelClass}>
-            <span className="mr-1">👤</span> Full Name
+            <User className="h-3 w-3 text-[#f97316]" />
+            Full Name
           </label>
           <input
             id="reg-fullName"
@@ -75,7 +77,8 @@ export function RegisterForm({
         </div>
         <div>
           <label htmlFor="reg-phone" className={labelClass}>
-            <span className="mr-1">📱</span> Mobile Number
+            <Phone className="h-3 w-3 text-[#f97316]" />
+            Mobile Number
           </label>
           <input
             id="reg-phone"
@@ -89,10 +92,11 @@ export function RegisterForm({
         </div>
       </div>
 
-      {/* Row 2 */}
+      {/* Row 2 — Email */}
       <div className="mb-5">
         <label htmlFor="reg-email" className={labelClass}>
-          <span className="mr-1">✉️</span> Email Address
+          <Mail className="h-3 w-3 text-[#f97316]" />
+          Email Address
         </label>
         <input
           id="reg-email"
@@ -105,18 +109,19 @@ export function RegisterForm({
         />
       </div>
 
-      {/* Row 3 */}
+      {/* Row 3 — Interest & Salary */}
       <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="reg-interestedIn" className={labelClass}>
-            <span className="mr-1">🎯</span> Interested In
+            <Target className="h-3 w-3 text-[#f97316]" />
+            Interested In
           </label>
           <div className="relative">
             <select
               id="reg-interestedIn"
               value={form.interestedIn}
               onChange={(e) => update("interestedIn", e.target.value)}
-              className={`${inputClass} appearance-none pr-10`}
+              className={`${inputClass} appearance-none pr-9`}
               required
             >
               <option value="">Select Interest</option>
@@ -124,19 +129,20 @@ export function RegisterForm({
                 <option key={opt} value={opt}>{opt}</option>
               ))}
             </select>
-            <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[10px] text-[#f97316]">▼</span>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#f97316]" />
           </div>
         </div>
         <div>
           <label htmlFor="reg-expectedSalary" className={labelClass}>
-            <span className="mr-1">💰</span> Expected Salary
+            <Wallet className="h-3 w-3 text-[#f97316]" />
+            Expected Salary
           </label>
           <div className="relative">
             <select
               id="reg-expectedSalary"
               value={form.expectedSalary}
               onChange={(e) => update("expectedSalary", e.target.value)}
-              className={`${inputClass} appearance-none pr-10`}
+              className={`${inputClass} appearance-none pr-9`}
               required
             >
               <option value="">Select Salary Range</option>
@@ -144,7 +150,7 @@ export function RegisterForm({
                 <option key={opt} value={opt}>{opt}</option>
               ))}
             </select>
-            <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[10px] text-[#f97316]">▼</span>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#f97316]" />
           </div>
         </div>
       </div>
@@ -178,7 +184,7 @@ export function RegisterForm({
         <span className="relative flex items-center justify-center gap-2">
           {loading ? (
             <>
-              <span className="inline-block animate-spin">⚽</span>
+              <Loader2 className="h-4 w-4 animate-spin" />
               Submitting…
             </>
           ) : (
@@ -186,6 +192,7 @@ export function RegisterForm({
           )}
         </span>
       </button>
+
     </form>
   );
 }

@@ -196,6 +196,16 @@ export default function AuthPage() {
         .ball-bounce      { display:inline-block; animation: fb-bounce 1.5s ease-in-out infinite; }
         .ball-bounce-delay{ display:inline-block; animation: fb-bounce 1.5s ease-in-out 0.75s infinite; }
 
+        /* Hype banner animations */
+        @keyframes hype-slide-left {
+          from { opacity: 0; transform: translateX(-48px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes hype-expand {
+          from { transform: scaleX(0); transform-origin: left; }
+          to   { transform: scaleX(1); transform-origin: left; }
+        }
+
         /* Card flip */
         .flip-wrapper {
           perspective: 1400px;
@@ -236,6 +246,40 @@ export default function AuthPage() {
 
         {/* ── Hero ── */}
         <HeroSection ctaLabel="Register Now" scrollTargetId="auth-form" />
+
+        {/* ── Hype banner ── */}
+        <div className="overflow-hidden bg-white px-4 py-6 sm:px-6">
+          <div className="mx-auto max-w-4xl">
+
+            {/* Line 1 — label */}
+            <div
+              className="mb-1 flex items-center gap-2"
+              style={{ animation: "hype-slide-left 0.7s cubic-bezier(0.22,1,0.36,1) both" }}
+            >
+              <span className="h-[3px] w-6 rounded-full bg-[#f97316]" />
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#f97316]">
+                FIFA World Cup 2026 Prediction
+              </p>
+            </div>
+
+            {/* Line 2 — headline */}
+            <div
+              style={{ animation: "hype-slide-left 0.75s 0.1s cubic-bezier(0.22,1,0.36,1) both" }}
+            >
+              <h2 className="text-2xl font-black uppercase italic leading-tight tracking-tight text-[#1a2b4b] sm:text-3xl">
+                It&apos;s Your Turn{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10 text-[#f97316]">to Predict.</span>
+                  <span
+                    className="absolute -bottom-0.5 left-0 h-[3px] w-full rounded-full bg-[#f97316]/30"
+                    style={{ animation: "hype-expand 0.6s 0.6s ease both" }}
+                  />
+                </span>
+              </h2>
+            </div>
+
+          </div>
+        </div>
 
         {/* ── Auth section ── */}
         <section

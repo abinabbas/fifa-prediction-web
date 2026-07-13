@@ -12,6 +12,7 @@ import { WinnerSelectionSection } from "@/components/launchpad/WinnerSelectionSe
 import { ExperienceSection } from "@/components/launchpad/ExperienceSection";
 import { PredictionHub } from "@/components/launchpad/PredictionHub";
 import { LeaderboardSection } from "@/components/launchpad/LeaderboardSection";
+import { FootballAnimation } from "@/components/launchpad/FootballAnimation";
 
 export function HomeContent() {
   const router = useRouter();
@@ -52,6 +53,7 @@ export function HomeContent() {
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-clip overflow-y-visible bg-[#fafafa]">
+      <FootballAnimation />
       <LaunchpadHeader />
 
       <HeroSection />
