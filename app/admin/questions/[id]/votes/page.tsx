@@ -11,6 +11,8 @@ import { LaunchpadFooter } from "@/components/launchpad/LaunchpadFooter";
 type ResultFilter = "all" | "correct" | "incorrect";
 type TimeSort = "desc" | "asc";
 
+const PAGE_SIZE = 10;
+
 function formatPhone(phone: string) {
   if (phone.length === 10) return `+91 ${phone.slice(0, 5)} ${phone.slice(5)}`;
   if (phone.length === 12 && phone.startsWith("91")) {
@@ -33,6 +35,7 @@ export default function QuestionVotesPage() {
   const [error, setError] = useState("");
   const [resultFilter, setResultFilter] = useState<ResultFilter>("all");
   const [timeSort, setTimeSort] = useState<TimeSort>("desc");
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     if (!authLoading) {
@@ -50,6 +53,10 @@ export default function QuestionVotesPage() {
       .catch(() => setError("Failed to load predictions"))
       .finally(() => setLoading(false));
   }, [user, questionId]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [resultFilter, timeSort]);
 
   const question = results?.question;
   const predictions = results?.predictions ?? [];
@@ -72,6 +79,12 @@ export default function QuestionVotesPage() {
 
     return rows;
   }, [predictions, hasCorrectAnswer, resultFilter, timeSort]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredPredictions.length / PAGE_SIZE));
+  const pageRows = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE;
+    return filteredPredictions.slice(start, start + PAGE_SIZE);
+  }, [filteredPredictions, page]);
 
   const filterBtnClass = (active: boolean) =>
     `px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
@@ -117,7 +130,9 @@ export default function QuestionVotesPage() {
               <h1 className="text-2xl font-bold text-[#1a2b4b] mb-2">{question.title}</h1>
               <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-slate-500">
                 <span>Closes: {new Date(question.closesAt).toLocaleString()}</span>
-                <span>{predictions.length} prediction{predictions.length !== 1 ? "s" : ""}</span>
+                <span>
+                  {predictions.length} prediction{predictions.length !== 1 ? "s" : ""}
+                </span>
                 {correctLabel && (
                   <span className="text-[#f97316] font-semibold">Correct: {correctLabel}</span>
                 )}
@@ -157,7 +172,9 @@ export default function QuestionVotesPage() {
                         </button>
                       </>
                     ) : (
-                      <span className="text-xs text-slate-400">Mark correct answer to filter by result</span>
+                      <span className="text-xs text-slate-400">
+                        Mark correct answer to filter by result
+                      </span>
                     )}
                   </div>
 
@@ -192,68 +209,97 @@ export default function QuestionVotesPage() {
               ) : filteredPredictions.length === 0 ? (
                 <p className="text-slate-500 text-center py-16">No predictions match this filter</p>
               ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm text-left">
-                    <thead>
-                      <tr className="bg-[#1a2b4b] text-white text-[10px] font-bold uppercase tracking-wider">
-                        <th className="px-4 py-3.5 w-12">#</th>
-                        <th className="px-4 py-3.5">Name</th>
-                        <th className="px-4 py-3.5">Phone</th>
-                        <th className="px-4 py-3.5">Email</th>
-                        <th className="px-4 py-3.5">College</th>
-                        <th className="px-4 py-3.5">District</th>
-                        <th className="px-4 py-3.5">Current Job</th>
-                        <th className="px-4 py-3.5">Interested In</th>
-                        <th className="px-4 py-3.5">Expected Salary</th>
-                        <th className="px-4 py-3.5">Learning Mode</th>
-                        <th className="px-4 py-3.5">Prediction</th>
-                        <th className="px-4 py-3.5">Submitted</th>
-                        {question.correctOptionId && <th className="px-4 py-3.5">Result</th>}
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      {filteredPredictions.map((row, index) => (
-                        <tr key={row.id} className="hover:bg-slate-50/80 transition-colors">
-                          <td className="px-4 py-3.5 text-slate-400 font-medium">{index + 1}</td>
-                          <td className="px-4 py-3.5 font-semibold text-[#1a2b4b]">{row.fullName}</td>
-                          <td className="px-4 py-3.5 text-slate-600 whitespace-nowrap">
-                            {formatPhone(row.phone)}
-                          </td>
-                          <td className="px-4 py-3.5 text-slate-600">{row.email}</td>
-                          <td className="px-4 py-3.5 text-slate-600">{showValue(row.college)}</td>
-                          <td className="px-4 py-3.5 text-slate-600">{row.district}</td>
-                          <td className="px-4 py-3.5 text-slate-600">{showValue(row.currentJob)}</td>
-                          <td className="px-4 py-3.5 text-slate-600">{showValue(row.interestedIn)}</td>
-                          <td className="px-4 py-3.5 text-slate-600 whitespace-nowrap">
-                            {showValue(row.expectedSalary)}
-                          </td>
-                          <td className="px-4 py-3.5 text-slate-600">{showValue(row.learningMode)}</td>
-                          <td className="px-4 py-3.5">
-                            <span className="inline-block px-2.5 py-1 rounded-md bg-[#eef1f6] text-[#1a2b4b] font-semibold text-xs">
-                              {row.selectedOptionLabel}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3.5 text-slate-500 whitespace-nowrap">
-                            {new Date(row.predictedAt).toLocaleString()}
-                          </td>
-                          {question.correctOptionId && (
-                            <td className="px-4 py-3.5">
-                              {row.isCorrect ? (
-                                <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-700">
-                                  Correct
-                                </span>
-                              ) : (
-                                <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700">
-                                  Wrong
-                                </span>
-                              )}
-                            </td>
-                          )}
+                <>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm text-left">
+                      <thead>
+                        <tr className="bg-[#1a2b4b] text-white text-[10px] font-bold uppercase tracking-wider">
+                          <th className="px-4 py-3.5 w-12">#</th>
+                          <th className="px-4 py-3.5">Name</th>
+                          <th className="px-4 py-3.5">Mobile</th>
+                          <th className="px-4 py-3.5">Email</th>
+                          <th className="px-4 py-3.5">Interested In</th>
+                          <th className="px-4 py-3.5">Expected Salary</th>
+                          <th className="px-4 py-3.5">Prediction</th>
+                          <th className="px-4 py-3.5">Submitted</th>
+                          {question.correctOptionId && <th className="px-4 py-3.5">Result</th>}
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {pageRows.map((row, index) => (
+                          <tr key={row.id} className="hover:bg-slate-50/80 transition-colors">
+                            <td className="px-4 py-3.5 text-slate-400 font-medium">
+                              {(page - 1) * PAGE_SIZE + index + 1}
+                            </td>
+                            <td className="px-4 py-3.5 font-semibold text-[#1a2b4b]">
+                              {row.fullName}
+                            </td>
+                            <td className="px-4 py-3.5 text-slate-600 whitespace-nowrap">
+                              {formatPhone(row.phone)}
+                            </td>
+                            <td className="px-4 py-3.5 text-slate-600">{row.email}</td>
+                            <td className="px-4 py-3.5 text-slate-600">
+                              {showValue(row.interestedIn)}
+                            </td>
+                            <td className="px-4 py-3.5 text-slate-600 whitespace-nowrap">
+                              {showValue(row.expectedSalary)}
+                            </td>
+                            <td className="px-4 py-3.5">
+                              <span className="inline-block px-2.5 py-1 rounded-md bg-[#eef1f6] text-[#1a2b4b] font-semibold text-xs">
+                                {row.selectedOptionLabel}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3.5 text-slate-500 whitespace-nowrap">
+                              {new Date(row.predictedAt).toLocaleString()}
+                            </td>
+                            {question.correctOptionId && (
+                              <td className="px-4 py-3.5">
+                                {row.isCorrect ? (
+                                  <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-700">
+                                    Correct
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700">
+                                    Wrong
+                                  </span>
+                                )}
+                              </td>
+                            )}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-t border-slate-100 px-4 py-4">
+                    <p className="text-xs text-slate-500">
+                      Showing {(page - 1) * PAGE_SIZE + 1}–
+                      {Math.min(page * PAGE_SIZE, filteredPredictions.length)} of{" "}
+                      {filteredPredictions.length}
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setPage((p) => Math.max(1, p - 1))}
+                        disabled={page <= 1}
+                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-[#1a2b4b] hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Previous
+                      </button>
+                      <span className="text-xs font-semibold text-slate-600">
+                        Page {page} / {totalPages}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                        disabled={page >= totalPages}
+                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-[#1a2b4b] hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
           </>
