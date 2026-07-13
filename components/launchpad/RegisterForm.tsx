@@ -3,22 +3,28 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { api, ApiError } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
-import { LaunchpadLogo } from "@/components/launchpad/LaunchpadLogo";
 
 const labelClass =
-  "block text-[10px] font-bold uppercase tracking-[0.1em] text-slate-500 mb-1.5";
+  "block text-[10px] font-bold uppercase tracking-[0.12em] text-[#1a2b4b] mb-1.5";
 
 const inputClass =
-  "block w-full px-3.5 py-[11px] border border-[#dde3ec] rounded-lg bg-white text-sm text-slate-800 placeholder:text-[#b0bac8] focus:outline-none focus:border-[#1a2b4b] focus:ring-2 focus:ring-[#1a2b4b]/10";
+  "block w-full px-3.5 py-[11px] border border-[#dde3ec] rounded-lg bg-white text-sm text-slate-800 placeholder:text-[#b0bac8] focus:outline-none focus:border-[#f97316] focus:ring-2 focus:ring-[#f97316]/15 transition-all";
 
 const INTEREST_OPTIONS = ["Digital Marketing", "Coding", "Cybersecurity", "Data Science", "Other"];
-
 const EXPECTED_SALARY_OPTIONS = ["Upto 25000", "25000 to 50000", "Above 50000"];
 
-export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirect?: string }) {
+export function RegisterForm({
+  onSuccessRedirect = "/home",
+  submitLabel = "Register Now",
+  onSwitchTab,
+}: {
+  onSuccessRedirect?: string;
+  submitLabel?: string;
+  /** Called when the user wants to switch to the login tab (used in tab context) */
+  onSwitchTab?: () => void;
+}) {
   const router = useRouter();
   const { setUser } = useAuth();
   const [form, setForm] = useState({
@@ -38,7 +44,6 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
     e.preventDefault();
     setError("");
     setLoading(true);
-
     try {
       const res = await api.register(form);
       setUser(res.user);
@@ -51,150 +56,136 @@ export function RegisterForm({ onSuccessRedirect = "/home" }: { onSuccessRedirec
   };
 
   return (
-    <div className="w-full max-w-2xl">
-      <Link
-        href="/home"
-        className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#1a2b4b] transition-colors hover:text-[#f97316]"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to home
-      </Link>
-
-      <div className="rounded-[14px] border border-slate-200 bg-[#f4f6f9] p-6 shadow-[0_2px_16px_rgba(15,23,42,0.06)] sm:p-8">
-      <div className="mb-6 flex justify-center">
-        <LaunchpadLogo />
-      </div>
-
-      <h1 className="mb-8 text-center text-lg font-bold text-[#1a2b4b]">New Registration</h1>
-
-      <form onSubmit={handleSubmit}>
-        <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <div>
-            <label htmlFor="fullName" className={labelClass}>
-              Full Name
-            </label>
-            <input
-              id="fullName"
-              type="text"
-              value={form.fullName}
-              onChange={(e) => update("fullName", e.target.value)}
-              placeholder="Enter your name"
-              className={inputClass}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="phone" className={labelClass}>
-              Mobile Number
-            </label>
-            <input
-              id="phone"
-              type="tel"
-              value={form.phone}
-              onChange={(e) => update("phone", e.target.value)}
-              placeholder="+91 00000 00000"
-              className={inputClass}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="mb-5">
-          <label htmlFor="email" className={labelClass}>
-            Email Address
+    <form onSubmit={handleSubmit}>
+      {/* Row 1 */}
+      <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="reg-fullName" className={labelClass}>
+            <span className="mr-1">👤</span> Full Name
           </label>
           <input
-            id="email"
-            type="email"
-            value={form.email}
-            onChange={(e) => update("email", e.target.value)}
-            placeholder="yourname@email.com"
+            id="reg-fullName"
+            type="text"
+            value={form.fullName}
+            onChange={(e) => update("fullName", e.target.value)}
+            placeholder="Enter your name"
             className={inputClass}
             required
           />
         </div>
+        <div>
+          <label htmlFor="reg-phone" className={labelClass}>
+            <span className="mr-1">📱</span> Mobile Number
+          </label>
+          <input
+            id="reg-phone"
+            type="tel"
+            value={form.phone}
+            onChange={(e) => update("phone", e.target.value)}
+            placeholder="+91 00000 00000"
+            className={inputClass}
+            required
+          />
+        </div>
+      </div>
 
-        <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <div>
-            <label htmlFor="interestedIn" className={labelClass}>
-              Interested In
-            </label>
-            <div className="relative">
-              <select
-                id="interestedIn"
-                value={form.interestedIn}
-                onChange={(e) => update("interestedIn", e.target.value)}
-                className={`${inputClass} appearance-none pr-10`}
-                required
-              >
-                <option value="">Select Interest</option>
-                {INTEREST_OPTIONS.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-slate-400">
-                ▼
-              </span>
-            </div>
-          </div>
-          <div>
-            <label htmlFor="expectedSalary" className={labelClass}>
-              Expected Salary
-            </label>
-            <div className="relative">
-              <select
-                id="expectedSalary"
-                value={form.expectedSalary}
-                onChange={(e) => update("expectedSalary", e.target.value)}
-                className={`${inputClass} appearance-none pr-10`}
-                required
-              >
-                <option value="">Select Salary Range</option>
-                {EXPECTED_SALARY_OPTIONS.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-slate-400">
-                ▼
-              </span>
-            </div>
+      {/* Row 2 */}
+      <div className="mb-5">
+        <label htmlFor="reg-email" className={labelClass}>
+          <span className="mr-1">✉️</span> Email Address
+        </label>
+        <input
+          id="reg-email"
+          type="email"
+          value={form.email}
+          onChange={(e) => update("email", e.target.value)}
+          placeholder="yourname@email.com"
+          className={inputClass}
+          required
+        />
+      </div>
+
+      {/* Row 3 */}
+      <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="reg-interestedIn" className={labelClass}>
+            <span className="mr-1">🎯</span> Interested In
+          </label>
+          <div className="relative">
+            <select
+              id="reg-interestedIn"
+              value={form.interestedIn}
+              onChange={(e) => update("interestedIn", e.target.value)}
+              className={`${inputClass} appearance-none pr-10`}
+              required
+            >
+              <option value="">Select Interest</option>
+              {INTEREST_OPTIONS.map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[10px] text-[#f97316]">▼</span>
           </div>
         </div>
-
-        {error && (
-          <div className="mb-5 rounded-lg border border-red-100 bg-red-50 p-3 text-sm text-red-600">
-            {error}
-            {error.includes("already taken") && (
-              <>
-                {" "}
-                <Link href="/login" className="font-semibold underline">
-                  Login instead
-                </Link>
-              </>
-            )}
+        <div>
+          <label htmlFor="reg-expectedSalary" className={labelClass}>
+            <span className="mr-1">💰</span> Expected Salary
+          </label>
+          <div className="relative">
+            <select
+              id="reg-expectedSalary"
+              value={form.expectedSalary}
+              onChange={(e) => update("expectedSalary", e.target.value)}
+              className={`${inputClass} appearance-none pr-10`}
+              required
+            >
+              <option value="">Select Salary Range</option>
+              {EXPECTED_SALARY_OPTIONS.map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[10px] text-[#f97316]">▼</span>
           </div>
-        )}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-xl bg-[#f97316] py-4 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#ea580c] disabled:opacity-50"
-        >
-          {loading ? "Submitting..." : "Submit & Start Predicting"}
-        </button>
-
-        <Link
-          href="/login"
-          className="mt-4 block w-full rounded-lg border-[1.5px] border-[#1a2b4b] bg-white py-3.5 text-center text-[11px] font-bold uppercase tracking-wide text-[#1a2b4b] transition-colors hover:bg-slate-50"
-        >
-          Already Participated? Submit Prediction
-        </Link>
-      </form>
+        </div>
       </div>
-    </div>
+
+      {error && (
+        <div className="mb-5 rounded-lg border border-red-100 bg-red-50 p-3 text-sm text-red-600">
+          {error}
+          {error.includes("already taken") && (
+            <>
+              {" "}
+              {onSwitchTab ? (
+                <button type="button" onClick={onSwitchTab} className="font-semibold underline">
+                  Login instead
+                </button>
+              ) : (
+                <Link href="/login" className="font-semibold underline">Login instead</Link>
+              )}
+            </>
+          )}
+        </div>
+      )}
+
+      {/* Primary CTA */}
+      <button
+        type="submit"
+        disabled={loading}
+        className="group relative w-full overflow-hidden rounded-xl py-4 text-xs font-black uppercase tracking-widest text-white transition-all hover:shadow-[0_6px_24px_rgba(249,115,22,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
+        style={{ background: "linear-gradient(135deg, #f97316 0%, #ea580c 100%)" }}
+      >
+        <span className="absolute inset-0 -skew-x-12 -translate-x-full bg-white/20 transition-transform duration-700 group-hover:translate-x-full" />
+        <span className="relative flex items-center justify-center gap-2">
+          {loading ? (
+            <>
+              <span className="inline-block animate-spin">⚽</span>
+              Submitting…
+            </>
+          ) : (
+            <>⚽ {submitLabel} ⚽</>
+          )}
+        </span>
+      </button>
+    </form>
   );
 }

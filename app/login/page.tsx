@@ -1,41 +1,22 @@
 "use client";
 
 import { useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
-import { LoginForm } from "@/components/launchpad/LoginForm";
 
-export default function LoginPage() {
+/**
+ * /login redirects to the unified auth page with the login tab pre-selected.
+ * All existing links to /login continue to work seamlessly.
+ */
+export default function LoginRedirectPage() {
   const router = useRouter();
-  const { user, loading } = useAuth();
 
   useEffect(() => {
-    if (!loading && user) {
-      router.replace("/home");
-    }
-  }, [loading, user, router]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#eef1f6] flex items-center justify-center">
-        <p className="text-slate-500 text-sm">Loading...</p>
-      </div>
-    );
-  }
-
-  if (user) return null;
+    router.replace("/register?tab=login");
+  }, [router]);
 
   return (
-    <div className="min-h-screen bg-[#eef1f6] flex flex-col items-center justify-center px-4 py-10">
-      <LoginForm />
-
-      <p className="mt-8 text-center text-sm text-slate-500">
-        New here?{" "}
-        <Link href="/register" className="text-[#f97316] font-semibold hover:underline">
-          Register now
-        </Link>
-      </p>
+    <div className="flex min-h-screen items-center justify-center bg-[#eef1f6]">
+      <span className="inline-block animate-spin text-2xl">⚽</span>
     </div>
   );
 }
