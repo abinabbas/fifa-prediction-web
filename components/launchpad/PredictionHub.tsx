@@ -64,10 +64,10 @@ function TeamPick({
       type="button"
       onClick={onSelect}
       disabled={disabled}
-      className={`flex flex-1 flex-col items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-5 transition-all disabled:cursor-default sm:px-4 sm:py-6 ${
+      className={`flex flex-1 flex-col items-center gap-3 rounded-2xl border px-3 py-5 transition-all disabled:cursor-default sm:px-4 sm:py-6 ${
         selected
-          ? "border-[#f97316] ring-2 ring-[#f97316] shadow-[0_12px_32px_rgba(249,115,22,0.28)]"
-          : "shadow-[0_12px_28px_rgba(15,23,42,0.1)] hover:border-slate-300 hover:shadow-[0_16px_36px_rgba(15,23,42,0.14)]"
+          ? "border-[#f97316] bg-[#f97316] shadow-[0_12px_32px_rgba(249,115,22,0.4)]"
+          : "border-slate-200 bg-white shadow-[0_12px_28px_rgba(15,23,42,0.1)] hover:border-slate-300 hover:shadow-[0_16px_36px_rgba(15,23,42,0.14)]"
       }`}
     >
       <div
@@ -81,7 +81,7 @@ function TeamPick({
           className="h-11 w-11 rounded-full object-cover sm:h-12 sm:w-12"
         />
       </div>
-      <span className="text-center text-[11px] font-extrabold tracking-wide text-[#1a2b4b] sm:text-xs">
+      <span className={`text-center text-[11px] font-extrabold tracking-wide sm:text-xs ${selected ? "text-white" : "text-[#1a2b4b]"}`}>
         {getTeamDisplayName(option)}
       </span>
     </button>
@@ -173,18 +173,29 @@ function QuestionCard({
     (option) => option.id === prediction?.selectedOptionId
   );
 
+  const searchStr = (question.title + " " + question.options.map(o => o.label + " " + (o.flagIso || "")).join(" ")).toLowerCase();
+  const isArgentinaSpain = searchStr.includes("argentina") || searchStr.includes("spain") || searchStr.includes("ar") || searchStr.includes("es");
+
   const card = (
-    <div className="relative w-full max-w-lg rounded-[1.35rem] bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
-      <div className="px-6 pb-6 pt-7 sm:px-8 sm:pb-7 sm:pt-8">
+    <div 
+      className={`relative w-full max-w-lg rounded-[1.35rem] shadow-[0_18px_50px_rgba(15,23,42,0.08)] overflow-hidden ${
+        isArgentinaSpain ? "bg-cover bg-center" : "bg-white"
+      }`}
+      style={isArgentinaSpain ? { backgroundImage: `url('https://res.cloudinary.com/delrmm6pq/image/upload/v1784180830/world-cup-odds-for-the-final-argentina-vs-spain_zy9jbu.avif')` } : {}}
+    >
+      {isArgentinaSpain && (
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/40" />
+      )}
+      <div className="relative z-10 px-6 pb-6 pt-7 sm:px-8 sm:pb-7 sm:pt-8">
         <div className="mb-6 flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#f97316] text-white">
             <Trophy className="h-5 w-5" />
           </div>
-          <h3 className="text-lg font-bold text-[#1a2b4b] sm:text-xl">Submit Prediction</h3>
+          <h3 className={`text-lg font-bold sm:text-xl ${isArgentinaSpain ? "text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.8)]" : "text-[#1a2b4b]"}`}>Submit Prediction</h3>
         </div>
 
-        <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">Today&apos;s Question</p>
-        <p className="mt-2 text-xl font-bold text-[#1a2b4b] sm:text-2xl">{question.title}</p>
+        <p className={`text-[10px] font-bold uppercase tracking-[0.14em] ${isArgentinaSpain ? "text-slate-200 [text-shadow:0_1px_4px_rgba(0,0,0,0.8)]" : "text-slate-400"}`}>Today&apos;s Question</p>
+        <p className={`mt-2 text-xl font-bold sm:text-2xl ${isArgentinaSpain ? "text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.8)]" : "text-[#1a2b4b]"}`}>{question.title}</p>
 
         <div className="mt-6">
           {hasPrediction ? (
@@ -228,7 +239,7 @@ function QuestionCard({
                   disabled={hasPrediction}
                   onSelect={() => setSelectedOption(homeTeam.id)}
                 />
-                <span className="shrink-0 px-1 text-xs font-bold uppercase tracking-wider text-slate-400">
+                <span className={`shrink-0 px-1 text-xs font-bold uppercase tracking-wider ${isArgentinaSpain ? "text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.8)]" : "text-slate-400"}`}>
                   VS
                 </span>
                 <TeamPick
@@ -298,7 +309,11 @@ function QuestionCard({
                 type="button"
                 onClick={handlePredictClick}
                 disabled={!selectedOption || submitting}
-                className="mt-6 w-full rounded-xl bg-[#f97316] py-4 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#ea580c] disabled:cursor-not-allowed disabled:opacity-50"
+                className={`mt-6 w-full rounded-xl py-4 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors ${
+                  !selectedOption || submitting
+                    ? "cursor-not-allowed bg-[#cc5a10] [text-shadow:0_1px_4px_rgba(0,0,0,0.5)]"
+                    : "bg-[#f97316] hover:bg-[#ea580c] [text-shadow:0_1px_4px_rgba(0,0,0,0.5)]"
+                }`}
               >
                 {submitting
                   ? "Submitting..."
@@ -311,7 +326,7 @@ function QuestionCard({
         </div>
       </div>
 
-      <div className="rounded-b-[1.35rem] border-t border-slate-100 bg-slate-50 px-5 py-4 sm:px-7">
+      <div className="relative z-10 rounded-b-[1.35rem] border-t border-slate-100 bg-slate-50 px-5 py-4 sm:px-7">
         <CountdownTimer
           closesAt={question.closesAt}
           serverTime={serverTime}
